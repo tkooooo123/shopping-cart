@@ -10,7 +10,7 @@ module.exports = {
       Array.from({ length: 10 }).map((v, i) => ({
         cartId: carts[i % (carts.length)].id,
         productId: products[Math.floor(Math.random() * 50)].id,
-        quantity: Math.floor(Math.random() * 50 + 10),
+        quantity: Math.floor(Math.random() * 10 + 1),
         createdAt: new Date,
         updatedAt: new Date
       })),
