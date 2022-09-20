@@ -31,9 +31,12 @@ const productController = {
                 nest: true,
                 raw: true
             })
+            let quantity = ''
+            quantity = await Array.from({ length: product.quantity}).map((v, i) => ( i + 1))
             console.log(product)
             return res.render('product', {  
-                product
+                product,
+                quantity
             })
 
         } catch (error) {
