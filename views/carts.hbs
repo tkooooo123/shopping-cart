@@ -1,0 +1,43 @@
+<h1>Carts</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">Cart ID</th>
+            <th scope="col">Image</th>
+            <th scope="col">Name</th>
+            <th scope="col">Quantity</th>
+            <th scope="col">Price</th>
+            <th scope="col">SubTotal</th>
+            <th scope="col">Remove</th>
+
+        </tr>
+    </thead>
+    
+    <tbody>
+        {{#each carts}}
+        <tr>
+            <td> #{{this.id}}</td>
+            <td>
+            <img src="{{this.cartProducts.image}}" alt="" width="200px">
+            </td>
+            <td>{{this.cartProducts.name}}</td>
+            <td>
+                <button>-</button>
+                {{this.cartProducts.CartItem.quantity}}
+                <button>+</button>
+            </td>
+            <td>${{this.cartProducts.price}}</td>
+            <td>
+                {{this.cartProducts.CartItem.quantity}}
+                 * 
+                 {{this.cartProducts.price}}
+            </td>
+            <td>
+                <button>Remove</button>
+            </td>
+        </tr>
+        {{/each}}
+    </tbody>
+    
+</table>

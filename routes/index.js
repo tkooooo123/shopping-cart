@@ -3,6 +3,7 @@ const router = express.Router()
 const passport = require('../config/passport') 
 const userController = require('../controllers/user-controller')
 const products = require('./modules/prooduct')
+const carts = require('./modules/cart')
 const { generalErrorHandler } = require('../middleware/error-handler') 
 router.get('/', (req, res) => {
   res.render('index')
@@ -15,5 +16,6 @@ router.post('/signup', userController.signUp)
 router.get('/logout', userController.logout)
 
 router.use('/products', products)
+router.use('/carts', carts)
 router.use('/', generalErrorHandler)
 module.exports = router
