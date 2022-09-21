@@ -26,8 +26,6 @@ const cartController = {
             let totalPrice = carts.length > 0 ? carts.map(d =>
                 d.cartProducts.price * d.cartProducts.CartItem.quantity)
                 .reduce((a, b) => a + b) : 0
-
-                console.log(carts[0])
             return res.render('carts', {
                 carts,
                 totalPrice
@@ -115,6 +113,20 @@ const cartController = {
             await cartItem.update({
                 quantity: cartItem.quantity + 1
             })
+            res.redirect('back')
+        } catch (error) {
+            console.log(error)
+        }
+    },
+    subCartItem: async(req, res) => {
+        try {
+            const cartItem = await CartItem.findByPk(req.params.id)
+            if (cartItem.quantity > 1) {
+                await cartItem.update({
+                    quantity: cartItem.quantity - 1
+                })
+            }
+         
             res.redirect('back')
         } catch (error) {
             console.log(error)

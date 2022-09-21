@@ -22,10 +22,15 @@
                 <img src="{{this.cartProducts.image}}" alt="" width="200px">
             </td>
             <td>{{this.cartProducts.name}}</td>
-            <td>
-                <button>-</button>
+           <td>
+                <form action="/carts/cartItem/{{this.cartProducts.CartItem.id}}/sub" method="POST">
+                <button type="submit">-</button>    
+                </form>
+                
                 {{this.cartProducts.CartItem.quantity}}
-                <button>+</button>
+                <form action="/carts/cartItem/{{this.cartProducts.CartItem.id}}/add" method="POST">
+                <button type="submit">+</button>    
+                </form>
             </td>
             <td>${{this.cartProducts.price}}</td>
             <td>
