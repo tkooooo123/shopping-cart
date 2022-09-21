@@ -1,0 +1,63 @@
+<h1>Orders</h1>
+{{#each orders}}
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Name</th>
+            <th scope="col">Total Amount</th>
+
+            <th scope="col">Payment_status</th>
+            <th scope="col">Shipping_status</th>
+            <th scope="col">Cancel Order</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>{{this.id}}</td>
+            <td>{{this.name}}</td>
+            <td>$ {{this.amount}}</td>
+            <td>
+                {{#ifCond this.payment_status '0'}}
+                    <button class="btn btn-primary">Pay</button>
+                {{/ifCond}}
+            </td>
+            <td>
+                {{#ifCond this.shipping_status '0'}}
+                Preparing
+                {{/ifCond}}
+                </td>
+            <td>
+                {{#ifCond this.shipping_status '0'}}
+                    <button class="btn btn-primary"> Cancel</button>
+                {{else}}
+                Canceled
+                {{/ifCond}}
+            </td>
+        </tr>
+        <div>
+            <table class="table">
+                <thead>
+                    <th>Product Name</th>
+                    <th scope="col">Price</th>
+                    <th scope="col">Quantity</th>
+                    <th scope="col">Subtotal</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each this.orderProducts}}
+                    <tr>
+                        <th scope="row">{{this.name}}
+                            <img src="" alt="">
+                        </th>
+                        <td>{{this.price}}</td>
+                        <td>{{this.OrderItem.quantity}}</td>
+                        <td>${{this.price}} * {{this.OrderItem.quantity}}</td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
+    </tbody>
+</table>
+{{/each}}

@@ -1,5 +1,5 @@
 const db = require('../models')
-const { Cart, Order, OrderItem } = db
+const { Cart, Order, OrderItem, CartItem } = db
 const { Op } = require('sequelize') 
 const orderController = {
     postOrder: async(req, res) => {
@@ -29,8 +29,46 @@ const orderController = {
                 })
             ))
             Promise.all(items)
+
+            //clear cartItems in cart
+            await carts.map(async(cart) => {
+                const cartItem = await CartItem.findByPk(cart.cartProducts.CartItem.id)
+                 cartItem.destroy()
+            })
+            
+            console.log(carts[0].cartProducts.CartItem.id)
           
-            return res.redirect('/')
+            return res.redirect('/orders')
+        } catch (error) {
+            console.log(error)
+        }
+    },
+    getOrder: async(req, res) =>{
+        try {
+            let [orders] = await Promise.all([
+                Order.findAll({
+                    where: { userId: req.user.id },
+                    include: 'orderProducts',
+    
+                })
+
+            ]) 
+            orders = orders.map(order => {
+                order = order.get({ plain: true })
+                return {
+                    id: order.id,
+                    amount: order.amount,
+                    name: order.name,
+                    phone: order.phone,
+                    address: order.address,
+                    payment_status: order.payment_status,
+                    shipping_status: order.shipping_status,
+                    orderProducts: order.orderProducts
+                }
+            })
+            return res.render('orders', {
+                orders
+            })
         } catch (error) {
             console.log(error)
         }
