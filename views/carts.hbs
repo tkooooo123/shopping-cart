@@ -23,9 +23,14 @@
             </td>
             <td>{{this.cartProducts.name}}</td>
             <td>
-                <button>-</button>
+                <form action="/carts/cartItem/{{this.cartProducts.CartItem.id}}/sub">
+                <button type="submit">-</button>    
+                </form>
+                
                 {{this.cartProducts.CartItem.quantity}}
-                <button>+</button>
+                <form action="/carts/cartItem/{{this.cartProducts.CartItem.id}}/add" method="POST">
+                <button type="submit">+</button>    
+                </form>
             </td>
             <td>${{this.cartProducts.price}}</td>
             <td>

@@ -27,6 +27,7 @@ const cartController = {
                 d.cartProducts.price * d.cartProducts.CartItem.quantity)
                 .reduce((a, b) => a + b) : 0
 
+                console.log(carts[0])
             return res.render('carts', {
                 carts,
                 totalPrice
@@ -104,6 +105,17 @@ const cartController = {
                 carts,
                 totalPrice
             })
+        } catch (error) {
+            console.log(error)
+        }
+    },
+    addCartItem: async(req, res) =>{
+        try {
+            const cartItem = await CartItem.findByPk(req.params.id)
+            await cartItem.update({
+                quantity: cartItem.quantity + 1
+            })
+            res.redirect('back')
         } catch (error) {
             console.log(error)
         }
