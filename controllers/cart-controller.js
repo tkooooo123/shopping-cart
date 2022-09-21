@@ -22,10 +22,15 @@ const cartController = {
                 })
                 carts = userCarts
             }
+           
+           if (carts.length > 0 && carts[0].cartProducts.id === null) {
+            carts = {}
+           } 
       
             let totalPrice = carts.length > 0 ? carts.map(d =>
                 d.cartProducts.price * d.cartProducts.CartItem.quantity)
                 .reduce((a, b) => a + b) : 0
+
             return res.render('carts', {
                 carts,
                 totalPrice
@@ -99,9 +104,10 @@ const cartController = {
             let totalPrice = carts.length > 0 ? carts.map(d =>
                 d.cartProducts.price * d.cartProducts.CartItem.quantity)
                 .reduce((a, b) => a + b) : 0
+                console.log(carts.toJSON().length)
             return res.render('cart-checkout', {
                 carts,
-                totalPrice
+                totalPrice,
             })
         } catch (error) {
             console.log(error)
@@ -128,6 +134,15 @@ const cartController = {
             }
          
             res.redirect('back')
+        } catch (error) {
+            console.log(error)
+        }
+    },
+    deleteCartItem: async(req, res) => {
+        try {
+            const cartItem = await CartItem.findByPk(req.params.id)
+            await cartItem.destroy()
+            return res.redirect('back')
         } catch (error) {
             console.log(error)
         }

@@ -16,6 +16,7 @@
 
     <tbody>
         {{#each carts}}
+        
         <tr>
             <td> #{{this.id}}</td>
             <td>
@@ -39,7 +40,10 @@
                 {{this.cartProducts.price}}
             </td>
             <td>
-                <button>Remove</button>
+                <form action="/carts/cartItem/{{this.cartProducts.CartItem.id}}/delete?_method=DELETE" method="POST">
+                <button type="submit">Remove</button>    
+                </form>
+                
             </td>
         </tr>
         {{/each}}
