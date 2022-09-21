@@ -4,6 +4,7 @@ const passport = require('../config/passport')
 const userController = require('../controllers/user-controller')
 const products = require('./modules/prooduct')
 const carts = require('./modules/cart')
+const orders = require('./modules/order')
 const { generalErrorHandler } = require('../middleware/error-handler') 
 router.get('/', (req, res) => {
   res.render('index')
@@ -17,5 +18,6 @@ router.get('/logout', userController.logout)
 
 router.use('/products', products)
 router.use('/carts', carts)
+router.use('/orders', orders)
 router.use('/', generalErrorHandler)
 module.exports = router
