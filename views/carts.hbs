@@ -13,13 +13,13 @@
 
         </tr>
     </thead>
-    
+
     <tbody>
         {{#each carts}}
         <tr>
             <td> #{{this.id}}</td>
             <td>
-            <img src="{{this.cartProducts.image}}" alt="" width="200px">
+                <img src="{{this.cartProducts.image}}" alt="" width="200px">
             </td>
             <td>{{this.cartProducts.name}}</td>
             <td>
@@ -30,8 +30,8 @@
             <td>${{this.cartProducts.price}}</td>
             <td>
                 {{this.cartProducts.CartItem.quantity}}
-                 * 
-                 {{this.cartProducts.price}}
+                *
+                {{this.cartProducts.price}}
             </td>
             <td>
                 <button>Remove</button>
@@ -39,5 +39,19 @@
         </tr>
         {{/each}}
     </tbody>
-    
+
 </table>
+<thead>
+    <tr>
+        <th scope="row"></th>
+        <td colspan="2"></td>
+        <td>Total:</td>
+        <td>${{totalPrice}}</td>
+    </tr>
+
+</thead>
+<div>
+    <a class="btn btn-primary" href="/products">Continue Shopping</a>
+    <a class="btn btn-secondary" href="">Order</a>
+
+</div>

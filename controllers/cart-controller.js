@@ -8,7 +8,7 @@ const cartController = {
             if (req.user) {
                 const userCarts = await Cart.findAll({
                     include: 'cartProducts',
-                    where: {[Op.or]: [{userId: req.user.id}, {id: req.session.cartId}] },
+                    where: { [Op.or]: [{ userId: req.user.id }, { id: req.session.cartId || null }] },
                     nest: true,
                     raw: true
                 })
@@ -22,8 +22,14 @@ const cartController = {
                 })
                 carts = userCarts
             }
+      
+            let totalPrice = carts.length > 0 ? carts.map(d =>
+                d.cartProducts.price * d.cartProducts.CartItem.quantity)
+                .reduce((a, b) => a + b) : 0
+
             return res.render('carts', {
-                carts
+                carts,
+                totalPrice
             })
         } catch (error) {
             console.log(error)
