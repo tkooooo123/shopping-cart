@@ -10,7 +10,6 @@ module.exports = (sequelize, DataTypes) => {
   }, {});
   Product.associate = function(models) {
     Product.belongsTo(models.Category)
-    
     Product.belongsToMany(models.Cart, {
       through: {
         model: models.CartItem,
@@ -19,6 +18,15 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: 'productId',
       as: 'cartProducts'
     })
+    Product.belongsToMany(models.Order, {
+      through: {
+        model: models.OrderItem,
+        unique: false
+      },
+      foreignKey: 'productId',
+      as: 'orderProducts'
+    })
+
   };
   return Product;
 };

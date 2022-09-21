@@ -11,7 +11,17 @@ module.exports = (sequelize, DataTypes) => {
     shipping_status: DataTypes.STRING
   }, {});
   Order.associate = function(models) {
-    // associations can be defined here
+    Order.belongsTo(models.User)
+    Order.belongsToMany(models.Product,{
+      through: {
+        model:models.OrderItem,
+        unique: false
+      },
+      foreignKey: 'orderId',
+      as: 'orderProducts'
+
+    })
+    
   };
   return Order;
 };
