@@ -75,6 +75,38 @@ const cartController = {
         } catch (error) {
             console.log(error)
         }
+    },
+    checkoutCart: async(req, res) => {
+        try {
+            let carts = {}
+            if (req.user) {
+                const userCarts = await Cart.findAll({
+                    include: 'cartProducts',
+                    where: { [Op.or]: [{ userId: req.user.id }, { id: req.session.cartId || null }] },
+                    nest: true,
+                    raw: true
+                })
+                carts = userCarts
+            } else {
+                const userCarts = await Cart.findAll({
+                    include: 'cartProducts',
+                    where: { id: req.session.cartId || null },
+                    nest: true,
+                    raw: true
+                })
+                carts = userCarts
+            }
+      
+            let totalPrice = carts.length > 0 ? carts.map(d =>
+                d.cartProducts.price * d.cartProducts.CartItem.quantity)
+                .reduce((a, b) => a + b) : 0
+            return res.render('cart-checkout', {
+                carts,
+                totalPrice
+            })
+        } catch (error) {
+            console.log(error)
+        }
     }
 
 }
