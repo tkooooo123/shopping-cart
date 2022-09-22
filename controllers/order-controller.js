@@ -72,6 +72,18 @@ const orderController = {
         } catch (error) {
             console.log(error)
         }
+    },
+    cancelOrder: async(req, res) => {
+        try {
+            const order = await Order.findByPk(req.params.id)
+            await order.update({
+                payment_status: '-1',
+                shipping_status: '-1'
+            })
+            return res.redirect('back')
+        } catch (error) {
+            console.log(error)
+        }
     }
 
 }
