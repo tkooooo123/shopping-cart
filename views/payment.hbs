@@ -1,0 +1,21 @@
+<div class="container">
+    <div class="d-flex flex-column align-items-center">
+        <h1>Confirm Your Payment</h1>
+        <ul >
+            <li class="list-group-item">Order Number: {{order.id}}</li>
+            <li class="list-group-item">Total Amount: $ {{order.amount}}</li>
+            <li class="list-group-item">Name: {{order.name}}</li>
+            <li class="list-group-item">Address: {{order.address}}</li>
+        </ul>
+            <form action="{{tradeInfo.PayGateWay}}" method="POST">
+                <input type="text" name="MerchantID" value="{{tradeInfo.MerchantID}}" hidden>
+                <input type="text" name="TradeInfo" value="{{tradeInfo.TradeInfo}}" hidden>
+                <input type="text" name="TradeSha" value="{{tradeInfo.TradeSha}}" hidden>
+                <input type="text" name="Version" value="{{tradeInfo.version}}" hidden>
+                <a href="/orders" class="btn btn-danger">Back</a>
+                <button type="submit" class="btn btn-primary">Pay</button>
+            </form>
+      
+
+    </div>
+</div>
