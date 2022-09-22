@@ -1,6 +1,7 @@
 const db = require('../models')
 const { Cart, Order, OrderItem, CartItem } = db
 const { Op } = require('sequelize') 
+const { getData } = require('../utils/payment')
 const orderController = {
     postOrder: async(req, res) => {
         try {
@@ -81,6 +82,22 @@ const orderController = {
                 shipping_status: '-1'
             })
             return res.redirect('back')
+        } catch (error) {
+            console.log(error)
+        }
+    },
+    getPayment: async(req, res) => {
+        try {
+            const order = await Order.findByPk(req.params.id)
+            const tradeInfo = getData(order.amount, 'Product', req.user.email)
+            await order.update({
+                sn: tradeInfo.MerchantOrderNo
+            })
+            console.log(tradeInfo)
+            return res.render('payment', {
+                order: order.toJSON(),
+                tradeInfo
+            })
         } catch (error) {
             console.log(error)
         }
