@@ -23,7 +23,11 @@
                 <button class="btn btn-primary" >Pay</button>
                 </form>
                  {{else}}
-                 Canceled   
+                 {{#ifCond this.payment_status '1'}}
+                 Paid
+                 {{else}}
+                 Canceled  
+                 {{/ifCond}}
                 {{/ifCond}}
             </td>
             <td>

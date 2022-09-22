@@ -1,7 +1,7 @@
 const db = require('../models')
-const { Cart, Order, OrderItem, CartItem } = db
+const { Cart, Order, OrderItem, CartItem, Payment, User } = db
 const { Op } = require('sequelize') 
-const { getData } = require('../utils/payment')
+const { getData, decryptedData } = require('../utils/payment')
 const orderController = {
     postOrder: async(req, res) => {
         try {
@@ -98,6 +98,37 @@ const orderController = {
                 order: order.toJSON(),
                 tradeInfo
             })
+        } catch (error) {
+            console.log(error)
+        }
+    },
+    newebpayCallback: async(req, res) => {
+        try {
+            const data = JSON.parse(decryptedData(req.body.TradeInfo))
+            const sn = data.Result.MerchantOrderNo
+            const order = await Order.findOne({
+                where: { sn },
+                include: User
+            })
+
+            await order.update({
+                payment_status: 1
+            })
+
+            await Payment.findOrCreate({
+                where: { params: sn },
+                defaults: {
+                  orderId: order.id,
+                  payment_method: data.Result.PaymentType,
+                  paid_at: data.Status === 'SUCCESS' ? Date.now() : null,
+                  params: sn
+                }
+              })
+
+
+
+            console.log(data)
+            
         } catch (error) {
             console.log(error)
         }
