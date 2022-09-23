@@ -90,6 +90,30 @@ const adminController = {
         } catch (error) {
             console.log(error)
         }
+    },
+    putProduct: async (req, res) => {
+        try {
+            const { name, categoryId, description, quantity, price } = req.body
+            const { file } = req
+            const filePath = await localFileHandler(file)
+            const product = await Product.findByPk(req.params.id)
+            console.log('asdasdada', product)
+            console.log(req.body) 
+
+                await product.update({
+                    name,
+                    categoryId,
+                    image: filePath || product.image,
+                    description,
+                    quantity,
+                    price
+                })
+           
+            return res.redirect('/admin/products')
+
+        } catch (error) {
+            console.log(error)
+        }
     }
 }
 

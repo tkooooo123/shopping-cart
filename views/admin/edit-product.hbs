@@ -12,9 +12,9 @@
     <div class="form-row mb-3">
         <label class="form-label" for="categoryId">Category</label>
         <select class="form-select" aria-label="" id="categoryId" name="categoryId">
-            <option value="{{product.category.id}}" selected>{{product.category.name}}</option>
+            <option value="{{product.Category.id}}" selected>{{product.Category.name}}</option>
             {{#each categories}}
-            {{#ifCond this.id ../product.category.id}}
+            {{#ifCond this.id ../product.Category.id}}
             {{else}}
             <option value="{{this.id}}">{{this.name}}</option>
             {{/ifCond}}
@@ -32,9 +32,9 @@
         <textarea class="form-control" id="description" name="description" rows="3">{{product.description}}</textarea>
     </div>
     <div class="form-row mb-3">
-        <label class="form-label" for="quentity">Quantity</label>
-        <input class="form-control" type="text" name="quentity" id="quentity" placeholder="Enter quentity"
-            value="{{product.quentity}}">
+        <label class="form-label" for="quantity">Quantity</label>
+        <input class="form-control" type="text" name="quantity" id="quantity" placeholder="Enter quantity"
+            value="{{product.quantity}}">
     </div>
 
     <div class="form-row mb-3">
