@@ -114,6 +114,17 @@ const adminController = {
         } catch (error) {
             console.log(error)
         }
+    },
+    deleteProduct: async(req, res) => {
+        try {
+            const product = await Product.findByPk(req.params.id)
+            await product.destroy()
+
+            return res.redirect('/admin/products')
+
+        } catch (error) {
+            console.log(error)
+        }
     }
 }
 
