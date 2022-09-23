@@ -36,6 +36,20 @@ getProduct: async(req, res) => {
     } catch (error) {
         console.log(error)
     }
+},
+addProduct: async(req, res) => {
+    try {
+        const categories = await Category.findAll({
+            raw: true
+        })
+
+        return res.render('admin/create-product', {
+            categories
+        })
+
+    } catch (error) {
+        console.log(error)
+    }
 }
 
 }

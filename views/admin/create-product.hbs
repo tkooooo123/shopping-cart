@@ -1,0 +1,40 @@
+<form action="/admin/product" method="POST" enctype="multipart/form-data">
+    <div class="mb-4 text-center">
+        <h1 class="h3 font-weight-normal mb-3">Create Product</h1>
+    </div>
+
+    
+    <div class="form-row mb-3">
+        <label class="form-label" for="name">Name</label>
+        <input class="form-control" type="text" name="name" id="name" placeholder="Enter name" required>
+    </div>
+    <div class="form-row mb-3">
+        <label class="form-label" for="categoryId">Category</label>
+        <select class="form-select" aria-label="" id="categoryId" name="categoryId">
+            <option selected>Please select!</option>
+            {{#each categories}}
+            <option value="{{this.id}}">{{this.name}}</option>
+            {{/each}}
+        </select>
+    </div>
+    <div class="form-row mb-3">
+        <label for="form-label" for="image">Image</label>
+        <input type="file" class="form-control" id="image" name="image">
+
+    </div>
+    
+    <div class="form-row mb-3">
+        <label class="form-label" for="description">Description</label>
+        <textarea class="form-control" id="description" name="description" rows="3"></textarea>
+    </div>
+    <div class="form-row mb-3">
+        <label class="form-label" for="quentity">Quantity</label>
+        <input class="form-control" type="text" name="quentity" id="quentity" placeholder="Enter quentity">
+    </div>
+
+    <div class="form-row mb-3">
+        <label class="form-label" for="price">Price</label>
+        <input class="form-control" type="text" name="price" id="price" placeholder="Enter price">
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
