@@ -1,5 +1,6 @@
 const db = require('../models')
 const { Product, Category } = db
+const { localFileHandler } = require('../helpers/file-helpers')
 const adminController = {
 getProducts: async(req, res) => {
     try {
@@ -47,6 +48,24 @@ addProduct: async(req, res) => {
             categories
         })
 
+    } catch (error) {
+        console.log(error)
+    }
+},
+postProduct: async(req, res) =>{
+    try {
+        const { name, categoryId, image, description, quantity, price } = req.body
+        const { file } = req
+        const filePath = await localFileHandler(file)
+        await Product.create({
+            name,
+            categoryId,
+            image: filePath || null,
+            description,
+            quantity,
+            price
+        })
+        return res.redirect('/admin/products')
     } catch (error) {
         console.log(error)
     }
