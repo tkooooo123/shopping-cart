@@ -1,0 +1,67 @@
+<ul class="nav nav-tabs my-4">
+  <li class="nav-item">
+    <a class="nav-link {{#ifCond route 'Products'}}active{{/ifCond}}" href="/admin/products">Products</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link {{#ifCond route 'categories'}}active{{/ifCond}}" href="/admin/categories">Categories</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link {{#ifCond route 'orders'}}active{{/ifCond}}" href="/admin/orders">Orders</a>
+  </li>
+</ul>
+
+<h1>Control Panel</h1>
+<ul class="nav nav-pills">
+    
+  <li class="nav-item">
+    <a class="nav-link {{#ifCond '' categoryId}}active{{/ifCond}}" href="?categoryId=">全部</a>
+  </li>
+  {{#each categories}}
+    <li class="nav-item">
+      <a class="nav-link {{#ifCond this.id ../categoryId}}active{{/ifCond}}"
+        href="?categoryId={{this.id}}">{{this.name}}</a>
+    </li>
+  {{/each}}
+</ul>
+<form action="/admin/product/add" >
+<button type="submit" class="btn btn-primary mt-2">Create Product</button>
+</form>
+
+<div class="container p-5">
+<table class="table align-middle">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Name</th>
+      <th scope="col">Category</th>
+      <th scope="col">#</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each products}}
+      <tr>
+        <th scope="row">{{this.id}}</th>
+        <td>{{this.name}}</td>
+        <td>{{this.Category.name}}</td>
+        <td>
+          <button type="button" class="btn btn-link">
+            <a class="btn btn-link link-primary" href="">
+              Show
+            </a>
+          </button>
+          <button type="button" class="btn btn-link">
+            <a class="btn btn-link link-primary" href="">
+              Edit
+            </a>
+          </button>
+          <form action="" style="display: inline;">
+            <button type="submit" class="btn btn-link link-danger">Delete</button>
+          </form>
+        </td>
+      </tr>
+    {{/each}}
+  </tbody>
+</table>
+
+</div>
+

@@ -6,7 +6,10 @@ const orderController = require('../controllers/order-controller')
 const products = require('./modules/prooduct')
 const carts = require('./modules/cart')
 const orders = require('./modules/order')
-const { generalErrorHandler } = require('../middleware/error-handler') 
+const admin = require('./modules/admin')
+const { generalErrorHandler } = require('../middleware/error-handler')
+const { authenticatedAdmin } = require('../middleware/auth') 
+
 router.get('/', (req, res) => {
   res.render('index')
 })
@@ -21,5 +24,6 @@ router.post('/newebpay/callback', orderController.newebpayCallback)
 router.use('/products', products)
 router.use('/carts', carts)
 router.use('/orders', orders)
+router.use('/admin', authenticatedAdmin, admin)
 router.use('/', generalErrorHandler)
 module.exports = router

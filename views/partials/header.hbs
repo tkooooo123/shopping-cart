@@ -8,6 +8,22 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    {{#ifCond user.role 'admin'}}
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="/admin">Admin</a>
+                    </li>
+                    {{#if isAuthenticated}}
+                    
+                    <li class="nav-item">
+                        <a class="nav-link" href="/logout">Logout</a>
+                    </li>
+                    {{else}}
+                    <li class="nav-item">
+                        <a class="nav-link " href="/signin">Login</a>
+                    </li>
+
+                    {{/if}}
+                    {{else}}
                     <li class="nav-item">
                         <a class="nav-link active" aria-current="page" href="/">Home</a>
                     </li>
@@ -20,7 +36,7 @@
                     <li class="nav-item">
                         <a class="nav-link" href="/orders">Order</a>
                     </li>
-                    {{#if user}}
+                    {{#if isAuthenticated}}
                     
                     <li class="nav-item">
                         <a class="nav-link" href="/logout">Logout</a>
@@ -31,7 +47,7 @@
                     </li>
 
                     {{/if}}
-                    
+                    {{/ifCond}}
                     
                 </ul>
                 <form class="d-flex">

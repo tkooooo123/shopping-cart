@@ -7,6 +7,7 @@ const userController = {
 
     },
     signIn: (req, res) => {
+        if (req.user.role === 'admin') return res.redirect('/admin')
         req.flash('success_messages', '成功登入！')
         return res.redirect('/')
 
