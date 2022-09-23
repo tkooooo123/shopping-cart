@@ -23,6 +23,19 @@ getProducts: async(req, res) => {
     } catch (error) {
         console.log(error)
     }
+},
+getProduct: async(req, res) => {
+    try {
+        const product = await Product.findByPk(req.params.id, {
+            raw: true
+        })
+
+        return res.render('admin/product', {
+            product
+        })
+    } catch (error) {
+        console.log(error)
+    }
 }
 
 }
