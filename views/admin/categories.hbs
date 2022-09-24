@@ -1,0 +1,43 @@
+<ul class="nav nav-tabs my-4">
+  <li class="nav-item">
+    <a class="nav-link {{#ifCond route 'Products'}}active{{/ifCond}}" href="/admin/products">Products</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link {{#ifCond route 'categories'}}active{{/ifCond}}" href="/admin/categories">Categories</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link {{#ifCond route 'orders'}}active{{/ifCond}}" href="/admin/orders">Orders</a>
+  </li>
+</ul>
+
+<div class="container p-5">
+
+<table class="table align-middle">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Name</th>
+      <th scope="col">Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each categories}}
+      <tr>
+        <th scope="row">{{this.id}}</th>
+        <td>{{this.name}}</td>
+        <td>
+          <button type="button" class="btn btn-link">
+            <a class="btn btn-link link-primary" href="/admin/categories/{{this.id}}">
+              Edit
+            </a>
+          </button>
+          <form action="/admin/categories/{{this.id}}?_method=DELETE" method="POST" style="display: inline;">
+            <button type="submit" class="btn btn-link link-danger">Delete</button>
+          </form>
+        </td>
+      </tr>
+    {{/each}}
+  </tbody>
+</table>
+
+</div>

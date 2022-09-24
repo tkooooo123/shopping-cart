@@ -125,6 +125,18 @@ const adminController = {
         } catch (error) {
             console.log(error)
         }
+    },
+    getCategories: async(req, res) => {
+        try {
+            const categories = await Category.findAll({
+                nest: true,
+                raw: true
+            })
+            return res.render('admin/categories', { categories })
+        } catch (error) {
+            console.log(error)
+        }
+
     }
 }
 
