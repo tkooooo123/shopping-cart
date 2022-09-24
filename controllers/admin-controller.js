@@ -188,6 +188,15 @@ const adminController = {
             console.log(error)
             next(error)
         }
+    },
+    deleteCategory: async(req, res) => {
+        try {
+            const category = await Category.findByPk(req.params.id)
+            await category.destroy()
+            return res.redirect('/admin/categories')
+        } catch (error) {
+            console.log(error)
+        }
     }
 }
 
