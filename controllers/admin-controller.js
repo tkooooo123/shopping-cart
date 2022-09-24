@@ -136,7 +136,24 @@ const adminController = {
         } catch (error) {
             console.log(error)
         }
+    },
+    addCategory: async(req, res, next) => {
+        try {
+            const { name } = req.body
+            const category= await Category.findOne({
+                where: { name }
+            })
+            if(category) throw new Error("此分類名稱已存在!")
 
+            await Category.create({
+                name
+            })
+
+            return res.redirect('/admin/categories')
+        } catch (error) {
+            console.log(error)
+            return next(error)
+        }
     }
 }
 

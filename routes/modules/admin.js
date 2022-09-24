@@ -13,6 +13,7 @@ router.delete('/product/:id/delete', adminController.deleteProduct)
 router.get('/product/:id/edit', adminController.editProduct)
 router.put('/product/:id', upload.single('image'), adminController.putProduct)
 router.get('/categories', adminController.getCategories)
+router.post('/category', adminController.addCategory)
 
 
 router.get('/', (req, res) => {
