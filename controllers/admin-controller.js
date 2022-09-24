@@ -154,6 +154,40 @@ const adminController = {
             console.log(error)
             return next(error)
         }
+    },
+    editCategory: async(req, res) => {
+        try {
+            const categories = await Category.findAll({
+                nest: true,
+                raw: true
+            })
+            const category = await Category.findByPk(req.params.id,{
+                raw: true
+            })
+            return res.render('admin/categories', { 
+                categories,
+                category })
+        } catch (error) {
+            console.log(error)
+        }
+
+    },
+    putCategory: async(req, res, next) => {
+        try {
+            const { name } = req.body
+            const data = await Category.findOne({
+                where: { name }
+            })
+            if (data) throw new Error("此分類名稱已存在!")
+            const category = await Category.findByPk(req.params.id)
+            await category.update({
+                name
+            })
+            return res.redirect('/admin/categories')
+        } catch (error) {
+            console.log(error)
+            next(error)
+        }
     }
 }
 

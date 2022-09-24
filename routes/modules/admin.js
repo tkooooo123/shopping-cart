@@ -14,7 +14,8 @@ router.get('/product/:id/edit', adminController.editProduct)
 router.put('/product/:id', upload.single('image'), adminController.putProduct)
 router.get('/categories', adminController.getCategories)
 router.post('/category', adminController.addCategory)
-
+router.get('/categories/:id', adminController.editCategory)
+router.put('/categories/:id', adminController.putCategory)
 
 router.get('/', (req, res) => {
     res.redirect('/admin/products')
