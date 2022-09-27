@@ -1,5 +1,5 @@
 const db = require('../models')
-const { Product, Category } = db
+const { Product, Category, Order } = db
 const { localFileHandler } = require('../helpers/file-helpers')
 const adminController = {
     getProducts: async (req, res) => {
@@ -194,6 +194,36 @@ const adminController = {
             const category = await Category.findByPk(req.params.id)
             await category.destroy()
             return res.redirect('/admin/categories')
+        } catch (error) {
+            console.log(error)
+        }
+    },
+    getOrders: async(req, res) => {
+        try {
+            const { payment , shipment } = req.query  
+            let filter = {}
+            if(payment && payment !== 'all') {
+                filter = {
+                    payment_status: payment
+                }
+            }
+            if(shipment && shipment !== 'all') {
+                filter = {
+                    shipping_status: shipment
+                }
+            }
+
+            const orders = await Order.findAll({
+                where: filter,
+                nest: true,
+                raw: true
+            })
+
+            return res.render('admin/orders', { 
+                orders,
+                payment,
+                shipment
+             })
         } catch (error) {
             console.log(error)
         }
