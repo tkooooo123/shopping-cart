@@ -247,6 +247,19 @@ const adminController = {
         } catch (error) {
             console.log(error)
         }
+    },
+    putOrder: async(req, res) => {
+        try {
+            const { payment, shipment } = req.body
+            const order = await Order.findByPk(req.params.id)
+            await order.update({
+                payment_status: payment,
+                shipping_status: shipment
+            })
+            return res.redirect('/admin/orders')
+        } catch (error) {
+            console.log(error)
+        }
     }
 }
 
