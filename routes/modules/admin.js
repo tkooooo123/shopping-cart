@@ -18,6 +18,7 @@ router.get('/categories/:id', adminController.editCategory)
 router.put('/categories/:id', adminController.putCategory)
 router.delete('/categories/:id', adminController.deleteCategory)
 router.get('/orders', adminController.getOrders)
+router.get('/orders/:id', adminController.editOrder)
 
 router.get('/', (req, res) => {
     res.redirect('/admin/products')

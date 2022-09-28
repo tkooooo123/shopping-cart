@@ -227,6 +227,26 @@ const adminController = {
         } catch (error) {
             console.log(error)
         }
+    },
+    editOrder: async(req, res) => {
+        try {
+            const order = await Order.findByPk(req.params.id, {
+                include: 'orderProducts',
+            })
+            let totalPrice = 0
+            
+            await order.orderProducts.forEach(e => {
+                totalPrice += e.price * e.OrderItem.quantity
+              })
+
+            console.log(order.toJSON())
+            return res.render('admin/edit-order', {
+                order: order.toJSON(),
+                totalPrice
+            })
+        } catch (error) {
+            console.log(error)
+        }
     }
 }
 
