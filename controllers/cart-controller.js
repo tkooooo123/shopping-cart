@@ -73,8 +73,10 @@ const cartController = {
                 quantity: (cartItem.quantity) + Number(req.body.quantity)
             })
 
-            req.session.cartId = cart.id //save cartId in session   
-
+            if(!req.user) {
+                req.session.cartId = cart.id //save cartId in session
+            }
+            
             return res.redirect('back')
         } catch (error) {
             console.log(error)
@@ -148,7 +150,7 @@ const cartController = {
                 include: 'cartProducts',
 
             })
-            
+
             if (cart.cartProducts.length === 0) {
                 await cart.destroy()
             }
