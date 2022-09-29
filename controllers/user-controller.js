@@ -24,10 +24,21 @@ const userController = {
     signUp: async (req, res, next) => {
         try {
             const { name, email, password, confirmPassword } = req.body
-            if (!name || !email || !password || !confirmPassword) throw new Error("所有欄位不可為空!")
+            if (!name || !email || !password || !confirmPassword) {
+                req.flash('error_messages', '所有欄位不可為空!')
+                return res.status(400).redirect('back')
+            }
             const user = await User.findOne({ where: { email } })
-            if (user) throw new Error("Email已重複註冊!")
-            if (password !== confirmPassword) throw new Error("密碼不相符!")
+
+            if (user) {
+                req.flash('error_messages', 'Email已重複註冊!')
+                return res.status(400).redirect('back')
+            }
+            if (password !== confirmPassword) {
+                req.flash('error_messages', '密碼不相符!')
+                return res.status(400).redirect('back')
+            }
+
 
             await User.create({
                 name,
