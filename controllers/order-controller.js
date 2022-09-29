@@ -2,6 +2,7 @@ const db = require('../models')
 const { Cart, Order, OrderItem, CartItem, Payment, User } = db
 const { Op } = require('sequelize')
 const { getData, decryptedData } = require('../utils/payment')
+const { orderConfirmMail, paymentConfirmMail } = require('../utils/mail')
 const orderController = {
     postOrder: async (req, res) => {
         try {
@@ -29,7 +30,9 @@ const orderController = {
                     price: carts[i].cartProducts.price
                 })
             ))
-            Promise.all(items)
+            await Promise.all(items)
+            //send order confirm mail
+            await orderConfirmMail(order)
 
             //clear cartItems in cart
             await carts.map(async (cart) => {
@@ -133,10 +136,10 @@ const orderController = {
                 }
             })
 
+            //send payment completed mail 
+            await paymentConfirmMail(order)
 
-
-            console.log(data)
-
+            return res.redirect('/')
         } catch (error) {
             console.log(error)
         }
