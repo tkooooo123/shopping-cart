@@ -1,6 +1,7 @@
 const db = require('../models')
 const { Product, Category, Order } = db
 const { localFileHandler } = require('../helpers/file-helpers')
+const { getOffset, getPagination } = require('../helpers/pagination-helper')
 const adminController = {
     getProducts: async (req, res) => {
         try {
@@ -16,10 +17,20 @@ const adminController = {
             const categories = await Category.findAll({
                 raw: true
             })
+            //paginator
+            const DEFAULT_LIMIT = 10
+            const page = Number(req.query.page) || 1
+            const limit = Number(req.query.limit) || DEFAULT_LIMIT
+            const offset = getOffset(limit, page)
+            const endIndex = offset +limit
+            const total = products.length
+
+
             return res.render('admin/products', {
-                products,
+                products: products.slice(offset, endIndex),
                 categories,
-                categoryId
+                categoryId,
+                pagination: getPagination(limit, page, total)
             })
         } catch (error) {
             console.log(error)
@@ -219,10 +230,19 @@ const adminController = {
                 raw: true
             })
 
+            //add paginator
+            const DEFAULT_LIMIT = 10
+            const page = Number(req.query.page) || 1
+            const limit = Number(req.query.limit) || DEFAULT_LIMIT
+            const offset = getOffset(limit, page)
+            const endIndex = offset +limit
+            const total = orders.length
+
             return res.render('admin/orders', { 
-                orders,
+                orders: orders.slice(offset, endIndex),
                 payment,
-                shipment
+                shipment,
+                pagination: getPagination(limit, page, total)
              })
         } catch (error) {
             console.log(error)

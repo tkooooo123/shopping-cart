@@ -1,5 +1,6 @@
 const db = require('../models')
 const { Product, Category } = db
+const { getOffset, getPagination } = require('../helpers/pagination-helper')
 const productController = {
     getProducts: async(req, res) => {
         try {
@@ -15,10 +16,20 @@ const productController = {
             const categories = await Category.findAll({
                 raw: true
             })
+
+            //paginator
+            const DEFAULT_LIMIT = 12
+            const page = Number(req.query.page) || 1
+            const limit = Number(req.query.limit) || DEFAULT_LIMIT
+            const offset = getOffset(limit, page)
+            const endIndex = offset +limit
+            const total = products.length
+
             return res.render('products',{ 
-                products,
+                products: products.slice(offset, endIndex),
                 categories,
-                categoryId
+                categoryId,
+                pagination: getPagination(limit, page, total)
              })
         } catch (error) {
             console.log(error)
@@ -33,7 +44,7 @@ const productController = {
             })
             let quantity = ''
             quantity = await Array.from({ length: product.quantity}).map((v, i) => ( i + 1))
-            console.log(product)
+            
             return res.render('product', {  
                 product,
                 quantity
