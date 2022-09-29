@@ -1,9 +1,9 @@
 const db = require('../models')
 const { Cart, Order, OrderItem, CartItem, Payment, User } = db
-const { Op } = require('sequelize') 
+const { Op } = require('sequelize')
 const { getData, decryptedData } = require('../utils/payment')
 const orderController = {
-    postOrder: async(req, res) => {
+    postOrder: async (req, res) => {
         try {
 
             const carts = await Cart.findAll({
@@ -21,39 +21,47 @@ const orderController = {
                 shipping_status: req.body.shipping_status,
                 payment_status: req.body.payment_status
             })
-            const items = Array.from({ length: carts.length}).map((d, i) => (
+            const items = Array.from({ length: carts.length }).map((d, i) => (
                 OrderItem.create({
                     orderId: order.id,
                     productId: carts[i].cartProducts.id,
-                    quantity:carts[i].cartProducts.CartItem.quantity,
+                    quantity: carts[i].cartProducts.CartItem.quantity,
                     price: carts[i].cartProducts.price
                 })
             ))
             Promise.all(items)
 
             //clear cartItems in cart
-            await carts.map(async(cart) => {
+            await carts.map(async (cart) => {
                 const cartItem = await CartItem.findByPk(cart.cartProducts.CartItem.id)
-                 cartItem.destroy()
+                const cartId = cartItem.cartId
+                await cartItem.destroy()
+
+                //destroy cart
+                const itemCart = await Cart.findByPk(cartId, {
+                    include: 'cartProducts'
+                })
+                if (itemCart.cartProducts.length === 0) {
+                    await itemCart.destroy()
+                }
+
             })
-            
-            console.log(carts[0].cartProducts.CartItem.id)
-          
+        
             return res.redirect('/orders')
         } catch (error) {
             console.log(error)
         }
     },
-    getOrder: async(req, res) =>{
+    getOrder: async (req, res) => {
         try {
             let [orders] = await Promise.all([
                 Order.findAll({
                     where: { userId: req.user.id },
                     include: 'orderProducts',
-    
+
                 })
 
-            ]) 
+            ])
             orders = orders.map(order => {
                 order = order.get({ plain: true })
                 return {
@@ -74,7 +82,7 @@ const orderController = {
             console.log(error)
         }
     },
-    cancelOrder: async(req, res) => {
+    cancelOrder: async (req, res) => {
         try {
             const order = await Order.findByPk(req.params.id)
             await order.update({
@@ -86,7 +94,7 @@ const orderController = {
             console.log(error)
         }
     },
-    getPayment: async(req, res) => {
+    getPayment: async (req, res) => {
         try {
             const order = await Order.findByPk(req.params.id)
             const tradeInfo = getData(order.amount, 'Product', req.user.email)
@@ -102,7 +110,7 @@ const orderController = {
             console.log(error)
         }
     },
-    newebpayCallback: async(req, res) => {
+    newebpayCallback: async (req, res) => {
         try {
             const data = JSON.parse(decryptedData(req.body.TradeInfo))
             const sn = data.Result.MerchantOrderNo
@@ -118,17 +126,17 @@ const orderController = {
             await Payment.findOrCreate({
                 where: { params: sn },
                 defaults: {
-                  orderId: order.id,
-                  payment_method: data.Result.PaymentType,
-                  paid_at: data.Status === 'SUCCESS' ? Date.now() : null,
-                  params: sn
+                    orderId: order.id,
+                    payment_method: data.Result.PaymentType,
+                    paid_at: data.Status === 'SUCCESS' ? Date.now() : null,
+                    params: sn
                 }
-              })
+            })
 
 
 
             console.log(data)
-            
+
         } catch (error) {
             console.log(error)
         }
