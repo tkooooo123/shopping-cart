@@ -8,7 +8,7 @@ const cartController = {
             if (req.user) {
                 const userCarts = await Cart.findAll({
                     include: 'cartProducts',
-                    where: { [Op.or]: [{ userId: req.user.id }, { id: req.session.cartId || null }] },
+                    where: { [Op.or]: [{ userId: req.user.id || null }, { id: req.session.cartId || null }] },
                     nest: true,
                     raw: true
                 })
@@ -22,11 +22,10 @@ const cartController = {
                 })
                 carts = userCarts
             }
-           
-           if (carts.length > 0 && carts[0].cartProducts.id === null) {
-            carts = {}
-           } 
-      
+            console.log(carts)
+            console.log(req.session.cartId)
+
+
             let totalPrice = carts.length > 0 ? carts.map(d =>
                 d.cartProducts.price * d.cartProducts.CartItem.quantity)
                 .reduce((a, b) => a + b) : 0
@@ -73,14 +72,15 @@ const cartController = {
             await cartItem.update({
                 quantity: (cartItem.quantity) + Number(req.body.quantity)
             })
-            console.log(req.user)
-            req.session.cartId = cart.id //save cartId in session
+
+            req.session.cartId = cart.id //save cartId in session   
+
             return res.redirect('back')
         } catch (error) {
             console.log(error)
         }
     },
-    checkoutCart: async(req, res) => {
+    checkoutCart: async (req, res) => {
         try {
             let carts = {}
             if (req.user) {
@@ -100,11 +100,11 @@ const cartController = {
                 })
                 carts = userCarts
             }
-      
+
             let totalPrice = carts.length > 0 ? carts.map(d =>
                 d.cartProducts.price * d.cartProducts.CartItem.quantity)
                 .reduce((a, b) => a + b) : 0
-                console.log(carts.toJSON().length)
+
             return res.render('cart-checkout', {
                 carts,
                 totalPrice,
@@ -113,7 +113,7 @@ const cartController = {
             console.log(error)
         }
     },
-    addCartItem: async(req, res) =>{
+    addCartItem: async (req, res) => {
         try {
             const cartItem = await CartItem.findByPk(req.params.id)
             await cartItem.update({
@@ -124,7 +124,7 @@ const cartController = {
             console.log(error)
         }
     },
-    subCartItem: async(req, res) => {
+    subCartItem: async (req, res) => {
         try {
             const cartItem = await CartItem.findByPk(req.params.id)
             if (cartItem.quantity > 1) {
@@ -132,16 +132,27 @@ const cartController = {
                     quantity: cartItem.quantity - 1
                 })
             }
-         
+
             res.redirect('back')
         } catch (error) {
             console.log(error)
         }
     },
-    deleteCartItem: async(req, res) => {
+    deleteCartItem: async (req, res) => {
         try {
             const cartItem = await CartItem.findByPk(req.params.id)
+            const cartId = cartItem.cartId
             await cartItem.destroy()
+
+            const cart = await Cart.findByPk(cartId, {
+                include: 'cartProducts',
+
+            })
+            
+            if (cart.cartProducts.length === 0) {
+                await cart.destroy()
+            }
+      
             return res.redirect('back')
         } catch (error) {
             console.log(error)
