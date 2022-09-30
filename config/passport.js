@@ -12,15 +12,27 @@ passport.use(new LocalStrategy(
     passReqToCallback: true
   },
   // authenticate user
-  (req, email, password, cb) => {
-    User.findOne({ where: { email } })
-      .then(user => {
-        if (!user) return cb(null, false, req.flash('error_messages', '帳號或密碼輸入錯誤！'))
-        bcrypt.compare(password, user.password).then(res => {
-          if (!res) return cb(null, false, req.flash('error_messages', '帳號或密碼輸入錯誤！'))
-          return cb(null, user)
-        })
-      })
+  async (req, email, password, cb) => {
+    try {
+      const { email } = req.body
+      const user = await User.findOne({ where: { email } })
+      if(!user) {
+        return cb(
+          null,
+          false,
+          req.flash('error_messages', '輸入的Email尚未註冊!')
+        )
+      }
+      if(!bcrypt.compareSync(password, user.password)) {
+        return cb(
+          null,
+          false,
+          req.flash('error_messages', '密碼輸入錯誤!')
+        )
+      }
+    } catch (error) {
+      console.log(error)
+    }
   }
 ))
 // serialize and deserialize user
@@ -30,7 +42,6 @@ passport.serializeUser((user, cb) => {
 passport.deserializeUser((id, cb) => {
   User.findByPk(id).then(user => {
     user = user.toJSON()
-    console.log(user)  //暫時添加
     return cb(null, user)
   })
 })
