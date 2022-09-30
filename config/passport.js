@@ -30,6 +30,7 @@ passport.use(new LocalStrategy(
           req.flash('error_messages', '密碼輸入錯誤!')
         )
       }
+      return cb(null, user)
     } catch (error) {
       console.log(error)
     }
