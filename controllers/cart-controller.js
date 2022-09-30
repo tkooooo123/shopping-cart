@@ -1,5 +1,5 @@
 const db = require('../models')
-const { Cart, CartItem } = db
+const { Cart, CartItem, Product } = db
 const { Op } = require("sequelize")
 const cartController = {
     getCarts: async (req, res) => {
@@ -118,10 +118,13 @@ const cartController = {
     addCartItem: async (req, res) => {
         try {
             const cartItem = await CartItem.findByPk(req.params.id)
-            await cartItem.update({
-                quantity: cartItem.quantity + 1
-            })
-            res.redirect('back')
+            const product = await Product.findByPk(cartItem.productId)
+            if(product.quantity > cartItem.quantity) {
+                await cartItem.update({
+                    quantity: cartItem.quantity + 1
+                })
+            }
+            return res.redirect('back')
         } catch (error) {
             console.log(error)
         }
@@ -134,8 +137,7 @@ const cartController = {
                     quantity: cartItem.quantity - 1
                 })
             }
-
-            res.redirect('back')
+            return res.redirect('back')
         } catch (error) {
             console.log(error)
         }
