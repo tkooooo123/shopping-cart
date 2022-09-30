@@ -1,5 +1,5 @@
 const db = require('../models')
-const { Cart, Order, OrderItem, CartItem, Payment, User } = db
+const { Cart, Order, OrderItem, CartItem, Payment, User, Product } = db
 const { Op } = require('sequelize')
 const { getData, decryptedData } = require('../utils/payment')
 const { orderConfirmMail, paymentConfirmMail } = require('../utils/mail')
@@ -33,6 +33,18 @@ const orderController = {
             await Promise.all(items)
             //send order confirm mail
             await orderConfirmMail(order)
+            
+            //decrease the inventory of product while order generated
+            const productMap = new Map()
+            carts.forEach(product => {
+                productMap.set(product.cartProducts.id, product.cartProducts.CartItem.quantity)
+            })
+            for (const [id, quantity] of productMap) {
+                const product = await Product.findByPk(id)
+                await product.update({
+                    quantity: product.quantity - quantity
+                })
+            }
 
             //clear cartItems in cart
             await carts.map(async (cart) => {
@@ -49,6 +61,8 @@ const orderController = {
                 }
 
             })
+
+        
         
             return res.redirect('/orders')
         } catch (error) {
