@@ -59,12 +59,9 @@ const orderController = {
                 if (itemCart.cartProducts.length === 0) {
                     await itemCart.destroy()
                 }
-
             })
-
-        
-        
-            return res.redirect('/orders')
+            
+            return res.redirect(`/orders/${order.id}/payment`)
         } catch (error) {
             console.log(error)
         }

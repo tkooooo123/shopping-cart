@@ -1,10 +1,26 @@
-<div class="container">
+<div class="container" style="max-width: 950px;">
+    <div class="step-container d-flex justify-content-center mt-5 mb-3">
+        <div class="step">
+            <span>1. Check Items</span>
+        </div>
+        <div class="line"></div>
+        <div class="step">
+            <span>2. Add Shipping Info</span>
+        </div>
+        <div class="line"></div>
+        <div class="step step-now">
+            <span>3. Confirm Order</span>
+        </div>
+    </div>
+
+
     <div class="d-flex flex-column align-items-center">
         <h1>Confirm Your Payment</h1>
         <ul >
             <li class="list-group-item">Order Number: {{order.id}}</li>
             <li class="list-group-item">Total Amount: $ {{order.amount}}</li>
             <li class="list-group-item">Name: {{order.name}}</li>
+            <li class="list-group-item">Phone: {{order.phone}}</li>
             <li class="list-group-item">Address: {{order.address}}</li>
         </ul>
             <form action="{{tradeInfo.PayGateWay}}" method="POST">

@@ -1,0 +1,19 @@
+.step {
+    border: #7897d5 1px solid;
+    border-radius: 30px;
+    padding: 15px 20px;
+    color: black;
+
+}
+
+.line {
+    border-top: #7897d5 2px solid;
+    margin-top: 28px;
+    width: 150px;
+}
+
+.step-container .step-now {
+    border: #4261d0;
+    background-color: #4261d0;
+    color: white;
+}

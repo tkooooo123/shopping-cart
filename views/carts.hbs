@@ -1,66 +1,87 @@
-<h1>Carts</h1>
+<div class="container" style="max-width: 950px;">
 
-<table class="table">
-    <thead>
-        <tr>
-            <th scope="col">Cart ID</th>
-            <th scope="col">Image</th>
-            <th scope="col">Name</th>
-            <th scope="col">Quantity</th>
-            <th scope="col">Price</th>
-            <th scope="col">SubTotal</th>
-            <th scope="col">Remove</th>
+        <div class="step-container d-flex justify-content-center mt-5 mb-3">
+            <div class="step step-now">
+                <span>1. Check Items</span>
+            </div>
+            <div class="line"></div>
+            <div class="step">
+                <span>2. Add Shipping Info</span>
+            </div>
+            <div class="line"></div>
+            <div class="step">
+                <span>3. Confirm Order</span>
+            </div>
 
-        </tr>
-    </thead>
+        </div>
 
-    <tbody>
-        {{#each carts}}
-        
-        <tr>
-            <td> #{{this.id}}</td>
-            <td>
-                <img src="{{this.cartProducts.image}}" alt="" width="200px">
-            </td>
-            <td>{{this.cartProducts.name}}</td>
-            <td>
-                <form action="/carts/cartItem/{{this.cartProducts.CartItem.id}}/sub" method="POST">
-                <button type="submit">-</button>    
-                </form>
-                
-                {{this.cartProducts.CartItem.quantity}}
-                <form action="/carts/cartItem/{{this.cartProducts.CartItem.id}}/add" method="POST">
-                <button type="submit">+</button>    
-                </form>
-            </td>
-            <td>${{this.cartProducts.price}}</td>
-            <td>
-                {{this.cartProducts.CartItem.quantity}}
-                *
-                {{this.cartProducts.price}}
-            </td>
-            <td>
-                <form action="/carts/cartItem/{{this.cartProducts.CartItem.id}}/delete?_method=DELETE" method="POST">
-                <button type="submit">Remove</button>    
-                </form>
-                
-            </td>
-        </tr>
-        {{/each}}
-    </tbody>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">Cart ID</th>
+                    <th scope="col">Image</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Quantity</th>
+                    <th scope="col">Price</th>
+                    <th scope="col">SubTotal</th>
+                    <th scope="col">Remove</th>
 
-</table>
-<thead>
-    <tr>
-        <th scope="row"></th>
-        <td colspan="2"></td>
-        <td>Total:</td>
-        <td>${{totalPrice}}</td>
-    </tr>
+                </tr>
+            </thead>
 
-</thead>
-<div>
-    <a class="btn btn-primary" href="/products">Continue Shopping</a>
-    <a class="btn btn-secondary" href="/carts/checkout">Order</a>
+            <tbody>
+                {{#each carts}}
+
+                <tr>
+                    <td> #{{this.id}}</td>
+                    <td>
+                        <img src="{{this.cartProducts.image}}" alt="" width="200px">
+                    </td>
+                    <td>{{this.cartProducts.name}}</td>
+                    <td>
+                        <form action="/carts/cartItem/{{this.cartProducts.CartItem.id}}/sub" method="POST">
+                            <button type="submit">-</button>
+                        </form>
+
+                        {{this.cartProducts.CartItem.quantity}}
+                        <form action="/carts/cartItem/{{this.cartProducts.CartItem.id}}/add" method="POST">
+                            <button type="submit">+</button>
+                        </form>
+                    </td>
+                    <td>${{this.cartProducts.price}}</td>
+                    <td>
+                        {{this.cartProducts.CartItem.quantity}}
+                        *
+                        {{this.cartProducts.price}}
+                    </td>
+                    <td>
+                        <form action="/carts/cartItem/{{this.cartProducts.CartItem.id}}/delete?_method=DELETE"
+                            method="POST">
+                            <button type="submit">Remove</button>
+                        </form>
+
+                    </td>
+                </tr>
+                {{/each}}
+
+                <tr>
+                <th scope="row"></th>
+                <td colspan="4"></td>
+                <td>Total:</td>
+                <td>${{totalPrice}}</td>
+            </tr>
+            </tbody>
+
+        </table>
+        <thead>
+           
+
+        </thead>
+        <div>
+            <a class="btn btn-secondary" href="/products">Continue Shopping</a>
+            <a class="btn btn-primary" href="/carts/checkout">Add Shopping Info</a>
+
+        </div>
+
 
 </div>
