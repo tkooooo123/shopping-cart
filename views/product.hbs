@@ -1,38 +1,41 @@
-<div class="row mb-5">
-  <div class="col-md-12">
-    <h1>{{product.name}}</h1>
-    <p>[{{product.Category.name}}]</p>
-  </div>
-  <div class="col-md-4">
-    <img class="img-responsive center-block mb-5" src="{{product.image}}"
-      style="width: 250px; transition: opacity 0.5s; opacity:0;" onload="this.style.opacity=1;">
-    <div class="well">
+<div class="container p-5">
+  <div class="row d-flex mb-5">
 
+    <div class="col">
+      <img class="img-responsive center-block mb-5" src="{{product.image}}"
+        style="width: 500px; transition: opacity 0.5s; opacity:0;" onload="this.style.opacity=1;">
     </div>
-  </div>
-  <div class="col-md-8">
-    <p style="white-space: break-spaces;">{{product.description}}</p>
-  </div>
-  <div>
-    $ {{product.price}}
-  </div>
-  <form action="/carts" method="POST">
-    <div class="input-group">
-      <label class="input-group-text" for="quantity">Quantity</label>
-      <select class="form-select" id="quantity" name="quantity">
-
-        {{#if quantity}}
-        {{#each quantity}}
-         <option {{#ifCond 1 this}}selected{{/ifCond}} value="{{this}}">{{this}}</option>
-         {{/each}}
-         {{else}}
-         <option disabled selected value="0"> 0</option>
-         {{/if}}
-      </select>
+    <div class="col">
+      <h3>{{product.name}}</h3>
+      <p>[{{product.Category.name}}]</p>
+      <hr>
+      <p style="white-space: break-spaces;">{{product.description}}</p>
+      <h5>
+        $ {{product.price}}
+      </h5>
+      <div class="d-flex align-items-center">
+        <form action="/carts" method="POST" class="d-flex flex-column">
+          <div class="input-group">
+            <label class="input-group-text" for="quantity">Quantity</label>
+            <select class="form-select" id="quantity" name="quantity">
+              {{#if quantity}}
+              {{#each quantity}}
+              <option {{#ifCond 1 this}}selected{{/ifCond}} value="{{this}}">{{this}}</option>
+              {{/each}}
+              {{else}}
+              <option disabled selected value="0"> 0</option>
+              {{/if}}
+            </select>
+          </div>
+          <input type="hidden" name="productId" value="{{product.id}}">
+          {{#if quantity}}
+          <button type="submit" class="btn btn-outline-success mt-2">Add to Cart</button>
+          {{else}}
+          <button type="submit" class="btn btn-outline-success mt-2" disabled>Add to Cart</button>
+          {{/if}}
+        </form>
+      </div>
     </div>
-    <input type="hidden" name="productId" value="{{product.id}}">
-    <button class="btn btn-seondary">Add to Cart</button>
-  </form>
-  <hr>
+    <hr>
+  </div>
 </div>
-<a class="btn btn-outline-secondary" href="javascript:history.back()">Back</a>
