@@ -84,6 +84,10 @@ const cartController = {
     },
     checkoutCart: async (req, res) => {
         try {
+            if (!req.user) {
+                req.flash('error_messages', '使用者尚未登入，請先登入!')
+                return res.status(401).redirect('/signin')
+            }
             let carts = {}
             if (req.user) {
                 const userCarts = await Cart.findAll({
@@ -101,6 +105,10 @@ const cartController = {
                     raw: true
                 })
                 carts = userCarts
+            }
+            if(carts.length === 0) {
+                req.flash('error_messages', '購物車是空的，請先新增商品!')
+                return res.status(400).redirect('back')
             }
 
             let totalPrice = carts.length > 0 ? carts.map(d =>
