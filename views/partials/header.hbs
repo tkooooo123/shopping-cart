@@ -51,7 +51,7 @@
 
 
     </nav>
-    {{#ifCond user.role 'user'}}
+   
     {{#if products}}
 
     <nav class="navbar navbar-light">
@@ -68,12 +68,12 @@
             {{/each}}
         </ul>
         <form class="d-flex">
-            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="keyword">
             <button class="btn btn-outline-primary" type="submit"><i class="fas fa-search"></i></button>
         </form>
     </nav>
 
     {{/if}}
-    {{/ifCond}}
+ 
     {{> messages}}
 </div>
