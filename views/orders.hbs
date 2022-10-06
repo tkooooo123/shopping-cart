@@ -1,76 +1,99 @@
-<h1>Orders</h1>
 {{#each orders}}
-<table class="table">
-    <thead>
-        <tr>
-            <th scope="col">ID</th>
-            <th scope="col">Name</th>
-            <th scope="col">Total Amount</th>
+<div class="p-5">
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">ID</th>
 
-            <th scope="col">Payment_status</th>
-            <th scope="col">Shipping_status</th>
-            <th scope="col">Cancel Order</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>{{this.id}}</td>
-            <td>{{this.name}}</td>
-            <td>$ {{this.amount}}</td>
-            <td>
-                {{#ifCond this.payment_status '0'}}
-                <form action="/orders/{{this.id}}/payment">
-                <button class="btn btn-primary" >Pay</button>
-                </form>
-                 {{else}}
-                 {{#ifCond this.payment_status '1'}}
-                 Paid
-                 {{else}}
-                 Canceled  
-                 {{/ifCond}}
-                {{/ifCond}}
-            </td>
-            <td>
-                {{#ifCond this.shipping_status '0'}}
-                Preparing
-                {{else}}
-                Canceled
-                {{/ifCond}}
+                <th scope="col">Total Amount</th>
+
+                <th scope="col">Payment_status</th>
+                <th scope="col">Shipping_status</th>
+                <th scope="col">Cancel Order</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{this.id}}</td>
+
+                <td>$ {{this.amount}}</td>
+                <td>
+                    {{#ifCond this.payment_status '0'}}
+                    <form action="/orders/{{this.id}}/payment">
+                        <button class="btn btn-primary">Pay</button>
+                    </form>
+                    {{else}}
+                    {{#ifCond this.payment_status '1'}}
+                    Paid
+                    {{else}}
+                    Canceled
+                    {{/ifCond}}
+                    {{/ifCond}}
                 </td>
-            <td>
-                {{#ifCond this.shipping_status '0'}}
-                <form action="/orders/{{this.id}}/cancel?_method=PUT" method="POST">
-                    <button class="btn btn-primary"> Cancel</button>
-                </form>
-                    
-                {{else}}
-                Canceled
-                {{/ifCond}}
-            </td>
-        </tr>
-        <div>
-            <table class="table">
-                <thead>
-                    <th>Product Name</th>
-                    <th scope="col">Price</th>
-                    <th scope="col">Quantity</th>
-                    <th scope="col">Subtotal</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {{#each this.orderProducts}}
-                    <tr>
-                        <th scope="row">{{this.name}}
-                            <img src="" alt="">
-                        </th>
-                        <td>{{this.price}}</td>
-                        <td>{{this.OrderItem.quantity}}</td>
-                        <td>${{this.price}} * {{this.OrderItem.quantity}}</td>
-                    </tr>
-                    {{/each}}
-                </tbody>
-            </table>
+                <td>
+                    {{#ifCond this.shipping_status '0'}}
+                    Preparing
+                    {{else}}
+                    Canceled
+                    {{/ifCond}}
+                </td>
+                <td>
+                    {{#ifCond this.shipping_status '0'}}
+                    <form action="/orders/{{this.id}}/cancel?_method=PUT" method="POST">
+                        <button class="btn btn-primary"> Cancel</button>
+                    </form>
+
+                    {{else}}
+                    Canceled
+                    {{/ifCond}}
+                </td>
+            </tr>
+
+
+
+
+        </tbody>
+    </table>
+    <div class="order-detail-tile">
+        <button class="btn btn-outline-primary" type="button" data-bs-toggle="collapse"
+            data-bs-target="#order{{this.id}}" aria-expanded="true" aria-controls="{{this.id}}">
+            + Order Details
+        </button>
+
+    </div>
+    <div class="collapse p-3" id="order{{this.id}}">
+        <table class="table" style="vertical-align: middle;">
+            <thead>
+                <th>Product Name</th>
+                <th scope="col">Price</th>
+                <th scope="col">Quantity</th>
+                <th scope="col">Subtotal</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                {{#each this.orderProducts}}
+                <tr>
+                    <th scope="row">
+                        <img src="{{this.image}}" style="width: 100px;" alt="">
+                        {{this.name}}
+                    </th>
+                    <td>{{this.price}}</td>
+                    <td>{{this.OrderItem.quantity}}</td>
+                    <td>${{this.price}} * {{this.OrderItem.quantity}}</td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+        <div style="max-width: 500px;">
+            <ul class="list-group">
+                <li class="list-group-item">Name: {{this.name}}</li>
+                <li class="list-group-item">Address: {{this.address}}</li>
+                <li class="list-group-item">Phone: {{this.phone}}</li>
+            </ul>
         </div>
-    </tbody>
-</table>
+    </div>
+
+</div>
+
 {{/each}}
