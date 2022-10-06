@@ -1,0 +1,16 @@
+
+.link {
+    text-decoration: none;
+    color: #72c8df;
+}
+
+.success {
+    padding: 6px 10px; 
+    border-radius: 5px; 
+    background-color: #8de492; 
+  }
+.fail {
+    padding: 6px 10px; 
+    border-radius: 5px; 
+    background-color: #ffccc8; 
+}

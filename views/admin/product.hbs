@@ -1,18 +1,24 @@
-<div class="row">
-  <div class="col-md-12">
-    <h1>{{product.name}}</h1>
-  </div>
-  <div class="col-md-4">
-    <div class="well">
-      <ul class="list-unstyled">
-        <img src="{{product.image}}" alt="">
-        <li><strong>Description:</strong> {{product.description}}</li>
-        <li><strong>Quantity:</strong> {{product.quantity}}</li>
-        <li><strong>Price:</strong> ${{product.price}}</li>
-      </ul>
+
+<div class="container p-5">
+  <div class="row d-flex mb-5">
+
+    <div class="col">
+      <img class="img-responsive center-block mb-5" src="{{product.image}}"
+        style="width: 500px; transition: opacity 0.5s; opacity:0;" onload="this.style.opacity=1;">
     </div>
+    <div class="col">
+      <h3>{{product.name}}</h3>
+      <p>[{{product.Category.name}}]</p>
+      <hr>
+      <p style="white-space: break-spaces;">{{product.description}}</p>
+      <h5>
+        Price: $ {{product.price}}
+      </h5>
+      <h5>Quantity: {{product.quantity}}</h5>
+      <div class="d-flex align-items-center">
+        <a class="btn btn-outline-primary" href="/admin/product/{{product.id}}/edit">Edit</a>
+      </div>
+    </div>
+    <hr>
   </div>
-  <hr>
 </div>
-<a class="btn btn-outline-secondary" href="javascript:history.back()">Back</a>
-<a class="btn btn-outline-primary" href="">Edit</a>

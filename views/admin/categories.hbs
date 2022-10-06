@@ -1,15 +1,4 @@
-<ul class="nav nav-tabs my-4">
-  <li class="nav-item">
-    <a class="nav-link {{#ifCond route 'Products'}}active{{/ifCond}}" href="/admin/products">Products</a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link {{#ifCond route 'categories'}}active{{/ifCond}}" href="/admin/categories">Categories</a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link {{#ifCond route 'orders'}}active{{/ifCond}}" href="/admin/orders">Orders</a>
-  </li>
-</ul>
-
+{{> admin-header}}
 <div class="container p-5">
 {{#if category}}
 <div class="d-flex align-items-center pt-3 pb-5 my-3 text-white-50 bg-purple">

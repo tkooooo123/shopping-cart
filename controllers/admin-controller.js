@@ -39,6 +39,8 @@ const adminController = {
     getProduct: async (req, res) => {
         try {
             const product = await Product.findByPk(req.params.id, {
+                include: Category,
+                nest: true,
                 raw: true
             })
 

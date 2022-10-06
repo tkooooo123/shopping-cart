@@ -1,6 +1,8 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
+<div class="container">
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
-            <a class="navbar-brand" href="/">Shopping Cart</a>
+            <a class="navbar-brand" href="">Shopping Cart</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                 data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
                 aria-label="Toggle navigation">
@@ -12,23 +14,10 @@
                     <li class="nav-item">
                         <a class="nav-link active" aria-current="page" href="/admin">Admin</a>
                     </li>
-                    {{#if isAuthenticated}}
-                    
-                    <li class="nav-item">
-                        <a class="nav-link" href="/logout">Logout</a>
-                    </li>
-                    {{else}}
-                    <li class="nav-item">
-                        <a class="nav-link " href="/signin">Login</a>
-                    </li>
 
-                    {{/if}}
                     {{else}}
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="/">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/products">All</a>
+                        <a class="nav-link" href="/products">Products</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/carts">Cart</a>
@@ -36,8 +25,16 @@
                     <li class="nav-item">
                         <a class="nav-link" href="/orders">Order</a>
                     </li>
+
+                    {{/ifCond}}
+
+                </ul>
+
+            </div>
+            <div>
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     {{#if isAuthenticated}}
-                    
+
                     <li class="nav-item">
                         <a class="nav-link" href="/logout">Logout</a>
                     </li>
@@ -47,13 +44,36 @@
                     </li>
 
                     {{/if}}
-                    {{/ifCond}}
-                    
                 </ul>
-                <form class="d-flex">
-                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                    <button class="btn btn-outline-success" type="submit">Search</button>
-                </form>
             </div>
+
         </div>
+
+
     </nav>
+    {{#ifCond user.role 'user'}}
+    {{#if products}}
+
+    <nav class="navbar navbar-light">
+        <!-- Navbar content -->
+        <ul class="nav nav-pills">
+            <li class="nav-item">
+                <a class="nav-link {{#ifCond '' categoryId}}active{{/ifCond}}" href="?categoryId=">全部</a>
+            </li>
+            {{#each categories}}
+            <li class="nav-item">
+                <a class="nav-link {{#ifCond this.id ../categoryId}}active{{/ifCond}}"
+                    href="?categoryId={{this.id}}">{{this.name}}</a>
+            </li>
+            {{/each}}
+        </ul>
+        <form class="d-flex">
+            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+            <button class="btn btn-outline-primary" type="submit"><i class="fas fa-search"></i></button>
+        </form>
+    </nav>
+
+    {{/if}}
+    {{/ifCond}}
+    {{> messages}}
+</div>
