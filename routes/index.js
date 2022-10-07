@@ -9,6 +9,7 @@ const orders = require('./modules/order')
 const admin = require('./modules/admin')
 const { generalErrorHandler } = require('../middleware/error-handler')
 const { authenticatedAdmin } = require('../middleware/auth') 
+const auth = require('./modules/auth')
 
 router.get('/', (req, res) => {
   res.render('index')
@@ -25,5 +26,6 @@ router.use('/products', products)
 router.use('/carts', carts)
 router.use('/orders', orders)
 router.use('/admin', authenticatedAdmin, admin)
+router.use('/auth', auth)
 router.use('/', generalErrorHandler)
 module.exports = router
