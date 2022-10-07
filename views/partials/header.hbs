@@ -53,7 +53,8 @@
     </nav>
    
     {{#if products}}
-
+{{#ifCond user.role 'admin'}}
+{{else}}
     <nav class="navbar navbar-light">
         <!-- Navbar content -->
         <ul class="nav nav-pills">
@@ -72,7 +73,7 @@
             <button class="btn btn-outline-primary" type="submit"><i class="fas fa-search"></i></button>
         </form>
     </nav>
-
+{{/ifCond}}
     {{/if}}
  
     {{> messages}}
