@@ -39,7 +39,8 @@ const productController = {
                 products: products.slice(offset, endIndex),
                 categories,
                 categoryId,
-                pagination: getPagination(limit, page, total)
+                pagination: getPagination(limit, page, total),
+                keyword
             })
         } catch (error) {
             console.log(error)
