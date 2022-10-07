@@ -6,7 +6,6 @@ const { orderConfirmMail, paymentConfirmMail } = require('../utils/mail')
 const orderController = {
     postOrder: async (req, res) => {
         try {
-
             const carts = await Cart.findAll({
                 include: 'cartProducts',
                 where: { [Op.or]: [{ userId: req.user.id }, { id: req.session.cartId || null }] },
@@ -60,7 +59,7 @@ const orderController = {
                     await itemCart.destroy()
                 }
             })
-            
+
             return res.redirect(`/orders/${order.id}/payment`)
         } catch (error) {
             console.log(error)
@@ -68,6 +67,10 @@ const orderController = {
     },
     getOrder: async (req, res) => {
         try {
+            if (!req.user) {
+                req.flash('error_messages', '使用者尚未登入，請先登入!')
+                return res.status(401).redirect('/signin')
+            }
             let [orders] = await Promise.all([
                 Order.findAll({
                     where: { userId: req.user.id },
