@@ -6,7 +6,6 @@
                 <th scope="col">ID</th>
 
                 <th scope="col">Total Amount</th>
-
                 <th scope="col">Payment_status</th>
                 <th scope="col">Shipping_status</th>
                 <th scope="col">Cancel Order</th>
@@ -63,20 +62,22 @@
     </div>
     <div class="collapse p-3" id="order{{this.id}}">
         <table class="table" style="vertical-align: middle;">
-            <thead>
+            <thead style="text-align: center;">
                 <th>Product Name</th>
                 <th scope="col">Price</th>
                 <th scope="col">Quantity</th>
                 <th scope="col">Subtotal</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody style="text-align: center;">
 
                 {{#each this.orderProducts}}
                 <tr>
-                    <th scope="row">
+                    <th scope="row" class="d-flex align-items-center ">
                         <img src="{{this.image}}" style="width: 100px;" alt="">
-                        {{this.name}}
+                        <p style="margin: 0 20px;">
+                            {{this.name}}
+                        </p>
                     </th>
                     <td>{{this.price}}</td>
                     <td>{{this.OrderItem.quantity}}</td>
