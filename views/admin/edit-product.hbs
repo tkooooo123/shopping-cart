@@ -4,8 +4,6 @@
             <div class="mb-4 text-center">
                 <h1 class="h3 font-weight-normal mb-3">Edit Product</h1>
             </div>
-
-
             <div class="form-row mb-3">
                 <label class="form-label" for="name">Name</label>
                 <input class="form-control" type="text" name="name" id="name" placeholder="Enter name"
@@ -49,45 +47,4 @@
         </div>
 
     </form>
-</div>
-<div class="container p-5">
-  <div class="row d-flex mb-5">
-
-    <div class="col">
-      <img class="img-responsive center-block mb-5" src="{{product.image}}"
-        style="width: 500px; transition: opacity 0.5s; opacity:0;" onload="this.style.opacity=1;">
-    </div>
-    <div class="col">
-      <h3>{{product.name}}</h3>
-      <p>[{{product.Category.name}}]</p>
-      <hr>
-      <p style="white-space: break-spaces;">{{product.description}}</p>
-      <h5>
-        $ {{product.price}}
-      </h5>
-      <div class="d-flex align-items-center">
-        <form action="/carts" method="POST" class="d-flex flex-column">
-          <div class="input-group">
-            <label class="input-group-text" for="quantity">Quantity</label>
-            <select class="form-select" id="quantity" name="quantity">
-              {{#if quantity}}
-              {{#each quantity}}
-              <option {{#ifCond 1 this}}selected{{/ifCond}} value="{{this}}">{{this}}</option>
-              {{/each}}
-              {{else}}
-              <option disabled selected value="0"> 0</option>
-              {{/if}}
-            </select>
-          </div>
-          <input type="hidden" name="productId" value="{{product.id}}">
-          {{#if quantity}}
-          <button type="submit" class="btn btn-outline-success mt-2">Add to Cart</button>
-          {{else}}
-          <button type="submit" class="btn btn-outline-success mt-2" disabled>Add to Cart</button>
-          {{/if}}
-        </form>
-      </div>
-    </div>
-    <hr>
-  </div>
 </div>
