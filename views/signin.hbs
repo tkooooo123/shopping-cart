@@ -2,8 +2,8 @@
   <div class="col-md-6 m-auto">
     <div class="card card-body">
       <h1 class="text-center mt-3">Login</h1>
-  
-    <form action="/signin" method="POST">
+
+      <form action="/signin" method="POST">
         <div class="mb-3">
           <label for="email" class="mb-2">Email</label>
           <input type="email" id="email" name="email" class="form-control" placeholder="Enter Email">
@@ -12,8 +12,13 @@
           <label for="password" class="mb-2">Password</label>
           <input type="password" id="password" name="password" class="form-control" placeholder="Enter Password">
         </div>
-        <button type="submit" class="btn btn-primary btn-block">Login</button>
-        <a href="/auth/facebook" class="btn btn-info btn-block">Facebook Login</a>
+        <div class="row d-flex">
+          <button type="submit" class="btn btn-primary btn-block mb-1">Login</button>
+          <a href="/auth/facebook" style="border-radius: 10px; border: 1px solid rgb(168, 165, 165)"
+            class="btn btn-block">Facebook Login <img src="/assets/facebook-svgrepo-com.svg" alt="facebook_logo" class="facebook " width=24 height=24></a>
+
+        </div>
+
       </form>
       <p class="lead mt-4">
         No Account? <a href="/signup">Register</a>
