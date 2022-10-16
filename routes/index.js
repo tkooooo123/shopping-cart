@@ -12,7 +12,7 @@ const { authenticatedAdmin } = require('../middleware/auth')
 const auth = require('./modules/auth')
 
 router.get('/', (req, res) => {
-  res.render('index')
+  res.redirect('/products')
 })
 router.get('/signin', userController.signInPage)
 router.post('/signin', passport.authenticate('local', { failureRedirect: '/signin', failureFlash: true }), userController.signIn)
