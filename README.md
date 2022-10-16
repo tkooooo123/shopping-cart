@@ -110,5 +110,5 @@ $npm run dev
 ```
 成功則顯示：
 ```
-App is running on http://localhost:3000
+The server is running on http://localhost:3000
 ```

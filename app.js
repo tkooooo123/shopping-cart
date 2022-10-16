@@ -39,5 +39,5 @@ app.use(routes)
 
 
 app.listen(PORT, () => {
-    console.log(`App is running onhttp://localhost:${PORT}`)
+    console.log(`The server is running on http://localhost:${PORT}`)
 })
