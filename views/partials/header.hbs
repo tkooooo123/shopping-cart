@@ -1,80 +1,233 @@
 <div class="container">
 
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="">Shopping Cart</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
-                aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    {{#ifCond user.role 'admin'}}
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="/admin">Admin</a>
-                    </li>
-
-                    {{else}}
-                    <li class="nav-item">
-                        <a class="nav-link" href="/products">Products</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/carts">Cart</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/orders">Order</a>
-                    </li>
-
-                    {{/ifCond}}
-
-                </ul>
-
-            </div>
-            <div>
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    {{#if isAuthenticated}}
-
-                    <li class="nav-item">
-                        <a class="nav-link" href="/logout">Logout</a>
-                    </li>
-                    {{else}}
-                    <li class="nav-item">
-                        <a class="nav-link " href="/signin">Login</a>
-                    </li>
-
-                    {{/if}}
-                </ul>
+    <nav class="navbar">
+        <div class="nav-wrapper">
+            <div class="navbar-brand" href="">
+                <img src="https://static.fotor.com.cn/assets/projects/pages/ae1370c0-ca43-11e9-8723-5b2e79bed1bc_312e5bdd-8128-4389-9cf0-8504d1dfd3ea_thumb.jpg"
+                    alt="">
             </div>
 
+
+
+            <ul class="nav-category-list d-flex">
+                {{#if products}}
+                <li class="category-item"> <a class="category-link {{#ifCond '' categoryId}}active{{/ifCond}}"
+                        href="?categoryId=">全部</a></li>
+                {{#each categories}}
+                <li class="category-item">
+                    <span class="line"></span>
+                    <a class="category-link {{#ifCond this.id ../categoryId}}active{{/ifCond}}"
+                        href="?categoryId={{this.id}}">{{this.name}}</a>
+                </li>
+                {{/each}}
+                {{/if}}
+            </ul>
+
+
+            <ul class="tool-list d-flex">
+                {{#ifCond user.role 'admin'}}
+
+                <li class="nav-item d-flex align-items-center">
+                    <span class="tool-line"></span>
+                    <a class="nav-link" href="/admin/products">商品</a>
+                </li>
+                <li class="nav-item d-flex align-items-center">
+                    <span class="tool-line"></span>
+                    <a class="nav-link" href="/admin/categories">分類</a>
+                </li>
+                <li class="nav-item d-flex align-items-center">
+                    <span class="tool-line"></span>
+                    <a class="nav-link" href="/admin/orders">訂單</a>
+                </li>
+
+                {{else}}
+                <li class="tool-item">
+                    <a class="tool-link" href="/products">首頁
+                        <i class="fa fa-home" aria-hidden="true"></i>
+                    </a>
+                    <span class="tool-line"></span>
+                </li>
+                <li class="tool-item d-flex align-items-center">
+                    <a class="tool-link" href="/carts">購物車
+                        <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+                    </a>
+
+                    <span class="tool-line"></span>
+                </li>
+                <li class="tool-item d-grid align-items-center">
+                    <a class="tool-link" href="/orders">訂單
+                        <i class="fa fa-file-text-o" aria-hidden="true"></i>
+                    </a>
+
+                    <span class="tool-line"></span>
+                </li>
+                {{/ifCond}}
+                <!--登入/登出 -->
+                {{#if isAuthenticated}}
+                <li class="tool-item d-flex align-items-center">
+                    <a class="tool-link" href="/logout">登出
+                        <i class="fa fa-sign-out" aria-hidden="true"></i>
+                    </a>
+                </li>
+                {{else}}
+                <li class="tool-item d-flex align-items-center ">
+                    <a class="tool-link " href="/signin">登入
+                        <i class="fa fa-sign-in" aria-hidden="true"></i>
+                    </a>
+
+                </li>
+                {{/if}}
+            </ul>
+            {{#ifCond user.role 'admin'}}
+            {{else}}
+            {{#if products}}
+            <form class="search-tool">
+                <input class="form-control-search ps-3" type="search" placeholder="Search" aria-label="Search"
+                    name="keyword">
+                <button class="btn search-btn" type="submit"><i class="fas fa-search"></i></button>
+            </form>
+             {{/if }}
+             {{/ifCond}}
         </div>
 
+    </nav>
 
-    </nav>
-   
-    {{#if products}}
-{{#ifCond user.role 'admin'}}
-{{else}}
-    <nav class="navbar navbar-light">
-        <!-- Navbar content -->
-        <ul class="nav nav-pills">
-            <li class="nav-item">
-                <a class="nav-link {{#ifCond '' categoryId}}active{{/ifCond}}" href="?categoryId=">全部</a>
-            </li>
-            {{#each categories}}
-            <li class="nav-item">
-                <a class="nav-link {{#ifCond this.id ../categoryId}}active{{/ifCond}}"
-                    href="?categoryId={{this.id}}">{{this.name}}</a>
-            </li>
-            {{/each}}
-        </ul>
-        <form class="d-flex">
-            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="keyword">
-            <button class="btn btn-outline-primary" type="submit"><i class="fas fa-search"></i></button>
-        </form>
-    </nav>
-{{/ifCond}}
-    {{/if}}
- 
+
+
     {{> messages}}
 </div>
+
+
+
+<style>
+    /*--basic setting--*/
+    ul,
+    li {
+        list-style: none;
+        margin: 0px;
+        padding: 0px;
+    }
+
+    a,
+    a:hover,
+    a:focus {
+        text-decoration: none;
+    }
+
+    /*--navbar--*/
+    .nav-wrapper {
+        width: 100%;
+        display: grid;
+        grid-template-columns: repeat(12, 1fr);
+        grid-template-rows: auto;
+        align-items: center;
+    }
+
+    .navbar-brand {
+        grid-column: 1/2;
+    }
+
+    .navbar-brand>img {
+        height: 80px;
+        width: 120px;
+        object-fit: cover;
+    }
+
+    .nav-category-list {
+        grid-column: 2/8;
+    }
+
+    .nav-admin-list {
+        grid-column: 2/6;
+    }
+
+    .category-item {
+        width: 100%;
+        height: 40px;
+        line-height: 40px;
+        text-align: center;
+        font-size: 1.5rem;
+        font-weight: 600;
+        position: relative;
+    }
+
+
+    .line {
+        position: absolute;
+        width: 3px;
+        height: 20px;
+        bottom: 50%;
+        transform: translateY(50%);
+        left: -2%;
+        background: rgb(184, 178, 178);
+    }
+
+    .category-link {
+        color: rgb(184, 178, 178);
+    }
+
+    .tool-link:hover,
+    .nav-link:hover {
+        color: rgb(113, 39, 39);
+    }
+
+    .tool-list {
+        grid-column: 9/13;
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        grid-gap: 15px;
+    }
+
+    .tool-item,
+    .nav-item {
+        display: flex;
+        justify-content: center;
+        width: 100%;
+        height: 40px;
+        line-height: 40px;
+        text-align: center;
+        font-size: 1rem;
+        position: relative;
+    }
+
+    .tool-link,
+    .nav-link {
+
+        color: rgb(184, 178, 178);
+    }
+
+    .tool-line {
+        position: absolute;
+        width: 1px;
+        height: 12px;
+        bottom: 50%;
+        transform: translateY(50%);
+        right: -12%;
+        background: rgb(184, 178, 178);
+    }
+
+    .search-tool {
+        grid-column: 11/13;
+        text-align: end;
+        padding-right: 42px;
+
+        width: 90%;
+        border: 1px solid #f0f0f5f0;
+        position: relative;
+    }
+
+    .form-control-search {
+        -webkit-appearance: none;
+        border: none;
+        height: 38px;
+        width: 100%;
+
+    }
+
+    .search-btn {
+        -webkit-appearance: none;
+        position: absolute;
+        right: 0;
+        bottom: 0;
+    }
+</style>
