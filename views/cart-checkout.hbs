@@ -1,86 +1,72 @@
 <div class="container" style="max-width: 950px;">
     <div class="step-container d-flex justify-content-center mt-5 mb-3">
         <div class="step">
-            <span>1. Check Items</span>
+            <div class="circle-container"></div>
+            <div class="label-container">確認商品</div>
         </div>
-        <div class="line"></div>
-        <div class="step step-now">
-            <span>2. Add Shipping Info</span>
+        <div class="step active">
+            <div class="circle-container"></div>
+            <div class="label-container">填寫個人資料</div>
+            <span class="connect-line"></span>
         </div>
-        <div class="line"></div>
-        <div class="step">
-            <span>3. Confirm Order</span>
+        <div class="step ">
+            <div class="circle-container"></div>
+            <div class="label-container">完成訂單</div>
+            <span class="connect-line"></span>
         </div>
     </div>
-    <table class="table" style="vertical-align: middle;">
-        <thead style="text-align: center;">
-            <tr>
-                <th scope="col">Image</th>
-                <th scope="col">Name</th>
-                <th scope="col">Quantity</th>
-                <th scope="col">Price</th>
-                <th scope="col">SubTotal</th>
-            </tr>
-        </thead>
+    <div class="shipping-info mt-5">
+        <div class="table-title">填寫個人資料</div>
+        <form action="/orders" method="POST">
+            <div class="form-wrapper d-flex justify-content-between">
+                <div class="info-wrapper">
+                    <div class="form-row">
+                        <label for="name" class="form-label">姓名</label>
+                        <input type="text" class="form-control" id="name" name="name" placeholder="請輸入姓名" required>
+                    </div>
+                    <div class="form-row">
+                        <label for="phone" class="form-label">電話</label>
+                        <input type="tel" class="form-control" id="phone" name="phone" placeholder="請輸入電話" required>
+                    </div>
+                    <div class="form-row info-address">
+                        <label for="address" class="form-label">地址</label>
+                        <input type="text" class="form-control" id="address" name="address" placeholder="請輸入地址"
+                            required>
+                    </div>
+                    <input type="hidden" name="cartId" value="{{cart.id}}">
+                    <input type="hidden" name="amount" value="{{totalPrice}}">
+                    <input type="hidden" name="shipping_status" value="0">
+                    <input type="hidden" name="payment_status" value="0">
+                </div>
+                <div class="card-wrapper">
+                    {{#each carts}}
+                    <div class="item-card d-flex">
+                        <img class="item-img" src=" {{this.cartProducts.image}}" alt="">
+                        <div class="card-info ">
+                            <div class="item-name">品名： {{this.cartProducts.name}}</div>
+                            <div class="item-quantity">數量： {{this.cartProducts.CartItem.quantity}}</div>
 
-        <tbody style="text-align: center;">
-            {{#each carts}}
-            <tr>
-                <td>
-                    <img src="{{this.cartProducts.image}}" alt="" width="200px">
-                </td>
-                <td>{{this.cartProducts.name}}</td>
-                <td>{{this.cartProducts.CartItem.quantity}}</td>
-                <td>${{this.cartProducts.price}}</td>
-                <td>
-                    {{this.cartProducts.CartItem.quantity}}
-                    *
-                    {{this.cartProducts.price}}
-                </td>
-            </tr>
-            {{/each}}
-            <tr>
-                <th scope="row"></th>
-                <td colspan="2"></td>
-                <td>Total:</td>
-                <td>${{totalPrice}}</td>
-            </tr>
-            </thead>
-        </tbody>
-    </table>
-
-
-    <div class="shipping-info mt-5" style="max-width: 550px;">
-        <div class="mb-3">
-            <h3>Shipping Info</h3>
-        </div>
-        <form class="order-info" action="/orders" method="POST">
-            <div class="mb-3">
-                <label for="name" class="form-label">Name</label>
-                <input type="text" class="form-control" id="name" name="name">
-
+                            <div class="subtotal">小計： {{this.cartProducts.CartItem.quantity}}
+                                *
+                                ${{this.cartProducts.price}}</div>
+                        </div>
+                    </div>
+                    {{/each}}
+                </div>
             </div>
-            <div class="mb-3">
-                <label for="phone" class="form-label">Phone</label>
-                <input type="tel" class="form-control" id="phone" name="phone">
-            </div>
-            <div class="mb-3">
-                <label for="address" class="form-label">Address</label>
-                <input type="text" class="form-control" id="address" name="address">
-            </div>
-            <input type="hidden" name="cartId" value="{{cart.id}}">
-            <input type="hidden" name="amount" value="{{totalPrice}}">
-            <input type="hidden" name="shipping_status" value="0">
-            <input type="hidden" name="payment_status" value="0">
 
-            <a href="/carts" class="btn btn-secondary mx-2">Edit Cart</a>
-            <button type="submit" class="btn btn-primary">Confirm Order</button>
+
+            <div class="control-wrapper d-flex justify-content-end">
+                <a class="prev-step" href="/carts">上一步</a>
+                <button type="submit" class="next-step" href="">送出資料</button>
+            </div>
 
         </form>
 
 
 
     </div>
+
 
 
 </div>

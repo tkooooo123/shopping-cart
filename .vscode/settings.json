@@ -1,0 +1,9 @@
+{
+    
+        "liveSassCompile.settings.formats":[
+            {
+                "savePath": "/public/stylesheets"
+            }
+        ]
+    
+}
