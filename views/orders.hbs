@@ -1,14 +1,15 @@
+
+<div class="order-container">
 {{#each orders}}
 <div class="p-5">
-    <table class="table">
+    <table class="table order-table">
         <thead>
             <tr>
-                <th scope="col">ID</th>
-
-                <th scope="col">Total Amount</th>
-                <th scope="col">Payment_status</th>
-                <th scope="col">Shipping_status</th>
-                <th scope="col">Cancel Order</th>
+                <th scope="col">訂單編號</th>
+                <th scope="col">總金額</th>
+                <th scope="col">付款狀態</th>
+                <th scope="col">運輸狀態</th>
+                <th scope="col">取消訂單</th>
             </tr>
         </thead>
         <tbody>
@@ -19,31 +20,31 @@
                 <td>
                     {{#ifCond this.payment_status '0'}}
                     <form action="/orders/{{this.id}}/payment">
-                        <button class="btn btn-primary">Pay</button>
+                        <button class="btn btn-primary">前往付款</button>
                     </form>
                     {{else}}
                     {{#ifCond this.payment_status '1'}}
-                    Paid
+                    完成付款
                     {{else}}
-                    Canceled
+                    已取消
                     {{/ifCond}}
                     {{/ifCond}}
                 </td>
                 <td>
                     {{#ifCond this.shipping_status '0'}}
-                    Preparing
+                    準備中
                     {{else}}
-                    Canceled
+                    已取消
                     {{/ifCond}}
                 </td>
                 <td>
                     {{#ifCond this.shipping_status '0'}}
                     <form action="/orders/{{this.id}}/cancel?_method=PUT" method="POST">
-                        <button class="btn btn-primary"> Cancel</button>
+                        <button class="btn btn-primary"> 取消</button>
                     </form>
 
                     {{else}}
-                    Canceled
+                    已取消
                     {{/ifCond}}
                 </td>
             </tr>
@@ -53,20 +54,21 @@
 
         </tbody>
     </table>
-    <div class="order-detail-tile">
+    <div class="order-detail-title">
         <button class="btn btn-outline-primary" type="button" data-bs-toggle="collapse"
             data-bs-target="#order{{this.id}}" aria-expanded="true" aria-controls="{{this.id}}">
-            + Order Details
+            + 明細
         </button>
 
     </div>
-    <div class="collapse p-3" id="order{{this.id}}">
-        <table class="table" style="vertical-align: middle;">
+    <div class="collapse p-3 order-detail" id="order{{this.id}}">
+        <div class="detail-wrapper">
+             <table class="table" style="vertical-align: middle; width:700px; ">
             <thead style="text-align: center;">
-                <th>Product Name</th>
-                <th scope="col">Price</th>
-                <th scope="col">Quantity</th>
-                <th scope="col">Subtotal</th>
+                <th>商品名稱</th>
+                <th scope="col">價格</th>
+                <th scope="col">數量</th>
+                <th scope="col">小計</th>
                 </tr>
             </thead>
             <tbody style="text-align: center;">
@@ -86,15 +88,27 @@
                 {{/each}}
             </tbody>
         </table>
-        <div style="max-width: 500px;">
-            <ul class="list-group">
-                <li class="list-group-item">Name: {{this.name}}</li>
-                <li class="list-group-item">Address: {{this.address}}</li>
-                <li class="list-group-item">Phone: {{this.phone}}</li>
-            </ul>
+        <div class="order-list">
+            <li class="list-item d-flex">
+                <div class="item-title">訂購人姓名</div>
+                <div class="item-text">{{this.name}}</div>
+                </li>
+            <li class="list-item d-flex">
+                <div class="item-title">配送地址</div>
+                <div class="item-text">{{this.address}}</div>
+                </li>
+            <li class="list-item d-flex">
+                <div class="item-title">連絡電話</div>
+                <div class="item-text">{{this.phone}}</div>
+            </li>
         </div>
+
+        </div>
+       
     </div>
 
 </div>
 
 {{/each}}
+
+</div>

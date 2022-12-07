@@ -1,35 +1,43 @@
 <div class="container" style="max-width: 950px;">
     <div class="step-container d-flex justify-content-center mt-5 mb-3">
-        <div class="step">
-            <span>1. Check Items</span>
+        <div class="step ">
+            <div class="circle-container"></div>
+            <div class="label-container">確認商品</div>
         </div>
-        <div class="line"></div>
-        <div class="step">
-            <span>2. Add Shipping Info</span>
+        <div class="step ">
+            <div class="circle-container"></div>
+            <div class="label-container">填寫個人資料</div>
+            <span class="connect-line"></span>
         </div>
-        <div class="line"></div>
-        <div class="step step-now">
-            <span>3. Confirm Order</span>
+        <div class="step active">
+            <div class="circle-container"></div>
+            <div class="label-container">完成訂單</div>
+            <span class="connect-line"></span>
         </div>
     </div>
 
 
-    <div class="d-flex flex-column align-items-center">
-        <h1>Confirm Your Payment</h1>
+    <div class="payment-wrapper">
+        <div class="table-title">完成訂單</div>
         <ul >
-            <li class="list-group-item">Order Number: {{order.id}}</li>
-            <li class="list-group-item">Total Amount: $ {{order.amount}}</li>
-            <li class="list-group-item">Name: {{order.name}}</li>
-            <li class="list-group-item">Phone: {{order.phone}}</li>
-            <li class="list-group-item">Address: {{order.address}}</li>
+            <li class="list-group-item">訂單編號: {{order.id}}</li>
+            <li class="list-group-item">總金額: $ {{order.amount}}</li>
+            <li class="list-group-item">姓名: {{order.name}}</li>
+            <li class="list-group-item">電話: {{order.phone}}</li>
+            <li class="list-group-item">地址: {{order.address}}</li>
         </ul>
             <form action="{{tradeInfo.PayGateWay}}" method="POST">
                 <input type="text" name="MerchantID" value="{{tradeInfo.MerchantID}}" hidden>
                 <input type="text" name="TradeInfo" value="{{tradeInfo.TradeInfo}}" hidden>
                 <input type="text" name="TradeSha" value="{{tradeInfo.TradeSha}}" hidden>
                 <input type="text" name="Version" value="{{tradeInfo.version}}" hidden>
-                <a href="/orders" class="btn btn-danger">Back</a>
-                <button type="submit" class="btn btn-primary">Pay</button>
+
+
+                <div class="control-wrapper d-flex justify-content-end">
+                <a class="prev-step" href="/orders">返回</a>
+                  <button class="next-step" type="submit" >前往付款</button>
+            </div>
+
             </form>
     </div>
 </div>

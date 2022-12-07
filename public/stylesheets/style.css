@@ -132,9 +132,53 @@
   padding: 5px 20px;
   display: block;
 }
-.card-wrapper .item-card .card-info .item-name, .card-wrapper .item-card .card-info .item-quantity {
+.card-wrapper .item-card .card-info .item-name,
+.card-wrapper .item-card .card-info .item-quantity {
   width: 100%;
 }
 .card-wrapper .item-card .card-info .subtotal {
   width: 100%;
+}
+
+/*Orders Page*/
+.order-container {
+  padding: 0 10%;
+}
+.order-container table {
+  border: 1px solid #f0f0f5;
+  border-radius: 8px;
+}
+.order-container th,
+.order-container td {
+  text-align: center;
+}
+.order-container thead {
+  background: #828282;
+  border: none;
+}
+.order-container .detail-wrapper {
+  display: flex;
+  justify-content: space-around;
+}
+.order-container .order-list {
+  border: 1px solid #f0f0f5;
+  border-radius: 8px;
+  width: 30%;
+  height: 30%;
+}
+.order-container .order-list .list-item {
+  height: 42px;
+  line-height: 42px;
+  border: 1px solid #f0f0f5;
+}
+.order-container .order-list .list-item .item-title {
+  background: #f0f0f5;
+  width: 30%;
+  line-height: 42px;
+  text-align: center;
+}
+.order-container .order-list .list-item .item-text {
+  flex: 1;
+  line-height: 42px;
+  text-align: center;
 }/*# sourceMappingURL=style.css.map */
