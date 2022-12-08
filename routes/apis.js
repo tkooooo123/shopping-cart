@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router()
 const productController = require('../controllers/api/productController')
 const cartController = require('../controllers/api/cartController')
+const orderController = require('../controllers/api/orderController')
 
 router.get('/products', productController.getProducts)
 router.get('/products/:id', productController.getProduct)
@@ -11,5 +12,9 @@ router.get('/carts/checkout', cartController.checkoutCart)
 router.post('/carts/cartItem/:id/add', cartController.addCartItem)
 router.post('/carts/cartItem/:id/sub', cartController.subCartItem)
 router.delete('/carts/cartItem/:id/delete', cartController.deleteCartItem)
+router.get('/orders', orderController.getOrder)
+router.post('/orders', orderController.postOrder)
+router.put('/orders/:id/cancel', orderController.cancelOrder)
+router.get('/orders/:id/payment', orderController.getPayment)
 
 module.exports = router
