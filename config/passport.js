@@ -3,7 +3,7 @@ const LocalStrategy = require('passport-local')
 const FacebookStrategy = require('passport-facebook').Strategy
 const bcrypt = require('bcryptjs')
 const db = require('../models')
-const User = db.User
+const { User, Order } = db
 // set up Passport strategy
 passport.use(new LocalStrategy(
   // customize user field
@@ -72,4 +72,23 @@ passport.deserializeUser((id, cb) => {
     return cb(null, user)
   })
 })
+//JWT
+const passportJWT = require('passport-jwt')
+const JWTStrategy = passportJWT.Strategy
+const ExtractJWT = passportJWT.ExtractJwt
+
+const jwtOptions = {
+  jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
+  secretOrKey: process.env.JWT_SECRET
+}
+passport.use(new JWTStrategy(jwtOptions, async (jwtPayload, cb) => {
+  const user = await User.findByPk(jwtPayload.id, {
+    include: [Order]
+  })
+  if (!user) {
+    return cb(error, false)
+  }
+  return cb(null, user)
+}))
+
 module.exports = passport
