@@ -1,6 +1,6 @@
 const db = require('../models')
 const { Product, Category, Order } = db
-const { localFileHandler } = require('../helpers/file-helpers')
+const { imgurFileHandler } = require('../helpers/file-helpers')
 const { getOffset, getPagination } = require('../helpers/pagination-helper')
 const adminController = {
     getProducts: async (req, res, cb) => {
@@ -11,6 +11,7 @@ const adminController = {
                 where: {
                     ...categoryId ? { categoryId } : {}
                 },
+                order: [['createdAt', 'DESC']],
                 nest: true,
                 raw: true
             })
@@ -75,8 +76,8 @@ const adminController = {
         try {
             const { name, categoryId, image, description, quantity, price } = req.body
             const { file } = req
-            const filePath = await localFileHandler(file)
-            await Product.create({
+            const filePath = await imgurFileHandler(file)
+            const product =  await Product.create({
                 name,
                 categoryId,
                 image: filePath || null,
@@ -84,7 +85,7 @@ const adminController = {
                 quantity,
                 price
             })
-            return cb()
+            return cb({product})
         } catch (error) {
             console.log(error)
         }
@@ -114,8 +115,9 @@ const adminController = {
         try {
             const { name, categoryId, description, quantity, price } = req.body
             const { file } = req
-            const filePath = await localFileHandler(file)
+            const filePath = await imgurFileHandler(file)
             const product = await Product.findByPk(req.params.id)
+           console.log(file)
             console.log('asdasdada', product)
             console.log(req.body) 
 
@@ -128,7 +130,9 @@ const adminController = {
                     price
                 })
            
-            return cb()
+            return cb({
+                product
+            })
 
         } catch (error) {
             console.log(error)
@@ -244,10 +248,16 @@ const adminController = {
                 }
             }
 
-            const orders = await Order.findAll({
+            let orders = await Order.findAll({
                 where: filter,
+                order: [['createdAt', 'DESC']],
                 nest: true,
                 raw: true
+            })
+
+            await orders.forEach(order => {
+                order.createdAt = order.createdAt.toLocaleDateString()
+
             })
 
             //add paginator
@@ -303,6 +313,7 @@ const adminController = {
     cancelOrder: async(req, res, cb) => {
         try {
             const order = await Order.findByPk(req.params.id)
+            
             await order.update({
                 payment_status: -1,
                 shipping_status: -1

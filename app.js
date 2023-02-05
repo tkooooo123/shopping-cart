@@ -12,9 +12,12 @@ const handlebarsHelpers = require('./helpers/handlebars-helpers')
 const { getUser } = require('./helpers/auth-helpers') 
 const routes = require('./routes')
 const app = express()
+const cors = require('cors')
 
 const PORT = process.env.PORT 
 const SESSION_SECRET = process.env.SESSION_SECRET
+
+app.use(cors())
 
 app.engine('hbs', exphbs({ defaultLayout: 'main', extname: '.hbs', helpers: handlebarsHelpers }))
 app.set('view engine', 'hbs')
