@@ -86,7 +86,7 @@ passport.use(new JWTStrategy(jwtOptions, async (jwtPayload, cb) => {
     include: [Order]
   })
   if (!user) {
-    return cb(error, false)
+    return cb(null, false)
   }
   return cb(null, user)
 }))
