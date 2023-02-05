@@ -28,7 +28,7 @@ const orderController = {
             } else {
                 req.flash('success_messages', data.message)
             }
-            return res.redirect('/orders')
+            return res.redirect(`${process.env.returnURL}`)
         })
     }
 }
