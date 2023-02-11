@@ -5,7 +5,7 @@ const { getData, decryptedData } = require('../utils/payment')
 const { orderConfirmMail, paymentConfirmMail } = require('../utils/mail')
 const orderService = {
     postOrder: async (req, res, cb) => {
-        try {
+        try {      
             const carts = await Cart.findAll({
                 include: 'cartProducts',
                 where: { [Op.or]: [{ userId: req.user.id }, { id: req.session.cartId || null }] },
@@ -29,7 +29,7 @@ const orderService = {
                     price: carts[i].cartProducts.price
                 })
             ))
-            await Promise.all(items)
+            await Promise.all(items)      
             //send order confirm mail
             await orderConfirmMail(order)
 
@@ -59,7 +59,7 @@ const orderService = {
                     await itemCart.destroy()
                 }
             })
-            console.log(order.toJSON())
+   
 
             return cb({ order: order.toJSON() })
 
@@ -77,6 +77,7 @@ const orderService = {
                 Order.findAll({
                     where: { userId: req.user.id },
                     include: 'orderProducts',
+                    order: [['createdAt', 'DESC']]                 
 
                 })
 
@@ -91,7 +92,8 @@ const orderService = {
                     address: order.address,
                     payment_status: order.payment_status,
                     shipping_status: order.shipping_status,
-                    orderProducts: order.orderProducts
+                    orderProducts: order.orderProducts,
+                    createdAt: order.createdAt.toLocaleDateString(),
                 }
             })
             return cb({
@@ -136,16 +138,12 @@ const orderService = {
                 where: { sn },
                 include: User
             })
-
             if (!order) {
                 return cb({
                     status: "error",
                     message: "The order doesn't exist!"
                 })
             }
-
-
-
             await Payment.findOrCreate({
                 where: { params: sn },
                 defaults: {
