@@ -2,11 +2,11 @@ const db = require('../models')
 const { Product, Category } = db
 const { getOffset, getPagination } = require('../helpers/pagination-helper')
 const { Op } = require('sequelize')
-const productController = {
+const productService = {
     getProducts: async (req, res, cb) => {
         try {
             let whereQuery = {}
-            let keyword = req.query.keyword
+            let keyword = req.query.keyword 
             let categoryId = ''
             if (keyword) {
                 keyword = req.query.keyword.trim()
@@ -34,13 +34,14 @@ const productController = {
             const offset = getOffset(limit, page)
             const endIndex = offset + limit
             const total = products.length
-console.log(req.user)
+
             return cb( {
                 products: products.slice(offset, endIndex),
                 categories,
                 categoryId,
                 pagination: getPagination(limit, page, total),
-                keyword
+                keyword,
+                totalProducts: products
             })
         } catch (error) {
             console.log(error)
@@ -68,4 +69,4 @@ console.log(req.user)
 
 }
 
-module.exports = productController
+module.exports = productService
