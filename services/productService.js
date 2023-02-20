@@ -20,6 +20,7 @@ const productService = {
             const products = await Product.findAll({
                 include: Category,
                 where: whereQuery ,
+                order: [['createdAt', 'DESC']],
                 nest: true,
                 raw: true
             })
