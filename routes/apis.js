@@ -10,6 +10,7 @@ const { authenticated, authenticatedAdmin } = require('../middleware/api-auth')
 
 router.get('/users/getCurrentUser', authenticated, userController.getCurrentUser)
 
+
 router.get('/products', productController.getProducts)
 router.get('/products/:id', productController.getProduct)
 router.get('/carts',authenticated, cartController.getCarts)
@@ -44,5 +45,6 @@ router.get('/admin/orders', authenticated, authenticatedAdmin, adminController.g
 
 router.post('/signin', userController.signIn)
 router.post('/signup', userController.signUp) 
+router.post('/facebook',userController.postFbSignIn)
 
 module.exports = router
