@@ -10,7 +10,7 @@ function getData(amount, desc, email) {
     const data = {
         MerchantID: MerchantID,
         TimeStamp: Date.now(),
-        Version: 2.0,
+        Version: '2.0',
         RespondType: 'JSON',
         MerchantOrderNo: Date.now(),
         Amt: amount,
@@ -25,7 +25,7 @@ function getData(amount, desc, email) {
         MerchantID: MerchantID,
         TradeInfo: tradeInfoAES(data),
         TradeSha: tradeInfoSHA(data),
-        version: 2.0,
+        version: data.Version,
         PayGateWay: PayGateWay,
         MerchantOrderNo: data.MerchantOrderNo
 
@@ -38,12 +38,14 @@ function genDataChain(data) {
     for (const obj of Object.entries(data)) {
         results.push(`${obj[0]}=${obj[1]}`)
     }
+
     return results.join('&')
 }
 
 //encrypt
 function tradeInfoAES(data) {
     const dataChain = genDataChain(data)
+    console.log(dataChain)
     const key = cryptoJS.enc.Utf8.parse(HashKey)
     const iv = cryptoJS.enc.Utf8.parse(HashIV)
     const tradeInfoAES = cryptoJS.AES.encrypt(dataChain, key, { iv })
