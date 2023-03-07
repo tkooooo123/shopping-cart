@@ -1,6 +1,6 @@
 # Shopping-Cart
 運用Express框架與MySQL資料庫實作購物平台，包含CRUD功能、資料庫建置、第三方API串接等，讓使用者在網站上可以完成一系列的購物流程
-![Shopping Cart](https://imgur.com/a/ObpSf4E.jpg)
+![Shopping Cart](https://i.imgur.com/5WvbrZg.jpg)
 ## 部署網址連結
 ```
 https://tkooooo123.github.io/alpha-shop/#/products
