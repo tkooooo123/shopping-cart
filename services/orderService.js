@@ -67,7 +67,7 @@ const orderService = {
             console.log(error)
         }
     },
-    getOrder: async (req, res, cb) => {
+    getOrders: async (req, res, cb) => {
         try {
             if (!req.user) {
                 req.flash('error_messages', '使用者尚未登入，請先登入!')
@@ -94,10 +94,25 @@ const orderService = {
                     shipping_status: order.shipping_status,
                     orderProducts: order.orderProducts,
                     createdAt: order.createdAt.toLocaleDateString(),
+                    
                 }
             })
             return cb({
                 orders
+            })
+        } catch (error) {
+            console.log(error)
+        }
+    },
+    getOrder: async(req, res, cb) => {
+        try {
+            const order = await Order.findOne({
+                where: { id: req.params.id },
+                include: 'orderProducts'
+            })
+
+            return cb({
+                order
             })
         } catch (error) {
             console.log(error)
@@ -122,6 +137,7 @@ const orderService = {
             await order.update({
                 sn: tradeInfo.MerchantOrderNo
             })
+            console.log(tradeInfo)
             return cb({
                 order: order.toJSON(),
                 tradeInfo

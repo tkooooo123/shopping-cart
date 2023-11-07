@@ -1,13 +1,17 @@
 const db = require('../models')
-const { Cart, CartItem, Product } = db
+const { Cart, CartItem, Product, Category } = db
 const { Op } = require("sequelize")
+const category = require('../models/category')
 const cartService = {
     getCarts: async (req, res, cb) => {
         try {
+   
+          
             let carts = {}
+         
             if (req.user) {
                 const userCarts = await Cart.findAll({
-                    include: 'cartProducts',
+                    include: { model: Product , as: "cartProducts" , include: Category },
                     where: { [Op.or]: [{ userId: req.user.id || null }, { id: req.session.cartId || null }] },
                     nest: true,
                     raw: true
@@ -16,7 +20,7 @@ const cartService = {
             } else {
                 const userCarts = await Cart.findAll({
                     include: 'cartProducts',
-                    where: { id: req.session.cartId || null },
+                    where: { id: req.query.cartId || null },
                     nest: true,
                     raw: true
                 })
@@ -26,9 +30,11 @@ const cartService = {
                 d.cartProducts.price * d.cartProducts.CartItem.quantity)
                 .reduce((a, b) => a + b) : 0
 
+                const test = {}
             return cb({
                 carts,
-                totalPrice
+                totalPrice,
+                test
             })
         } catch (error) {
             console.log(error)
@@ -36,6 +42,7 @@ const cartService = {
     },
     postCart: async (req, res, cb) => {
         try {
+         
             let cart = {}
             if (req.user) {
                 const [userCart] = await Cart.findOrCreate({
@@ -69,13 +76,17 @@ const cartService = {
                 quantity: (cartItem.quantity) + Number(req.body.quantity)
             })
 
+            let getCartId = ''
             if(!req.user) {
                 req.session.cartId = cart.id //save cartId in session
+                getCartId = cart.id
+                
             }
             return cb({
                 status: 'success',
-                message: 'CartItem was successfully created!',
-                cart
+                message: '已加入購物車!',
+                cart,
+                getCartId
             })
             //return res.redirect('back')
         } catch (error) {
@@ -156,9 +167,33 @@ const cartService = {
             console.log(error)
         }
     },
+    updateCartItem: async (req, res, cb) => {
+        try {
+            console.log(req.body.quantity)
+            const cartItem = await CartItem.findByPk(req.params.id)
+           
+                await cartItem.update({
+                    quantity: req.body.quantity
+                })
+            
+            return cb ({
+                status: "success",
+                message: "The cartItem's quantity was successfully reduced!"
+            })
+        } catch (error) {
+            console.log(error)
+        }
+    },
     deleteCartItem: async (req, res, cb) => {
         try {
             const cartItem = await CartItem.findByPk(req.params.id)
+            if(!cartItem) {
+                return cb({
+                    status: "error",
+                    statusCode: "500",
+                    message:"找不到此項商品"
+                })
+            }
             const cartId = cartItem.cartId
             await cartItem.destroy()
 
@@ -172,8 +207,28 @@ const cartService = {
             }
       
             return cb({
+                cart,
                 status: "success",
-                message: "The cartItem  was successfully deleted!"
+                message: "已刪除商品!"
+            })
+        } catch (error) {
+            console.log(error)
+        }
+    },
+    deleteCart: async (req, res, cb) => {
+        try {
+            const cart = await Cart.findByPk(req.params.id);
+            if(!cart) {
+                return cb({
+                    status: "error",
+                    statusCode: "500",
+                    message:"購物車不存在"
+                })
+            }
+            await cart.destroy()
+            return cb({
+                status: "success",
+                message: "已刪除所有商品"
             })
         } catch (error) {
             console.log(error)

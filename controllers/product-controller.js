@@ -5,7 +5,7 @@ const { Op } = require('sequelize')
 const productService = require('../services/productService')
 const productController = {
     getProducts:  (req, res) => {
-        productService.getProducts(req, res, (data) => {
+        productService.getProducts(req, res, (data) => {            
             return res.render('products',(data))
         })
     },

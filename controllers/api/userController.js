@@ -6,7 +6,14 @@ const jwt = require('jsonwebtoken')
 const userController = {
     signIn: (req, res) => {
         userService.signIn(req, res, data => {
-            return res.json(data)
+            if (data.statusCode === '401') {
+                return res.status(401).json(data)
+            } else if(data.statusCode === '400') {
+                return  res.status(400).json(data)
+            } else {
+                return  res.status(200).json(data)
+            }
+            
         })
 
     },
