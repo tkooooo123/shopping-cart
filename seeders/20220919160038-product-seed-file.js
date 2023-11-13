@@ -14,6 +14,9 @@ module.exports = {
         description: faker.lorem.sentences(1),
         quantity: Math.floor(Math.random() * 100 + 50),
         price: 5 * (Math.floor(Math.random() * 100)) + 100,
+        is_enabled: true,
+        imagesUrl: JSON.stringify([]),
+        content: '',
         createdAt: new Date,
         updatedAt: new Date
       })),
