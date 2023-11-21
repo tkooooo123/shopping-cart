@@ -32,6 +32,9 @@ const adminController = {
     },
     deleteProduct: (req, res) => {
         adminService.deleteProduct(req, res, data => {
+            if(data.statusCode === 500) {
+                res.status(500).json(data)
+            }
             return res.json(data)
         })
     },
@@ -81,7 +84,21 @@ const adminController = {
         adminService.cancelOrder(req, res, data => {
             return res.json(data)
         })
-    }
+    },
+    deleteOrder: (req, res) => {
+        adminService.deleteOrder(req, res, data => {
+            if(data.statusCode === 500) {
+                res.status(500).json(data)
+            }
+            return res.json(data)
+        })
+    },
+    uploadImgs: (req, res) => {
+        adminService.uploadImgs(req, res, data => {
+            
+            return res.json(data)
+        })
+    },
 }
 
 

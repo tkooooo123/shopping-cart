@@ -35,6 +35,7 @@ router.post('/admin/product',authenticated, authenticatedAdmin, upload.single('i
 router.delete('/admin/products/:id/delete', authenticated, authenticatedAdmin, adminController.deleteProduct)
 router.get('/admin/product/:id/edit', authenticated, authenticatedAdmin, adminController.editProduct)
 router.put('/admin/products/:id', authenticated, authenticatedAdmin, upload.single('image'), adminController.putProduct)
+router.post('/admin/product/upload', authenticated, authenticatedAdmin, upload.array('imagesUrl'), adminController.uploadImgs )
 router.get('/admin/categories', authenticated, authenticatedAdmin, adminController.getCategories)
 router.post('/admin/categories', authenticated, authenticatedAdmin, adminController.addCategory)
 router.get('/admin/categories/:id', authenticated, authenticatedAdmin, adminController.editCategory)
@@ -45,6 +46,7 @@ router.get('/admin/orders/:id', authenticated, authenticatedAdmin, adminControll
 router.put('/admin/orders/:id', authenticated, authenticatedAdmin, adminController.putOrder)
 router.put('/admin/orders/:id/cancel', authenticated, authenticatedAdmin, adminController.cancelOrder)
 router.get('/admin/orders', authenticated, authenticatedAdmin, adminController.getOrders)
+router.delete('/admin/orders/:id', authenticated, authenticatedAdmin, adminController.deleteOrder)
 
 router.post('/signin', userController.signIn)
 router.post('/signup', userController.signUp) 
