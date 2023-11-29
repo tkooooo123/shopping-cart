@@ -48,6 +48,8 @@ router.put('/admin/orders/:id/cancel', authenticated, authenticatedAdmin, adminC
 router.get('/admin/orders', authenticated, authenticatedAdmin, adminController.getOrders)
 router.delete('/admin/orders/:id', authenticated, authenticatedAdmin, adminController.deleteOrder)
 
+router.post('/admin/upload', upload.single('image'), authenticated, authenticatedAdmin, adminController.uploadImg)
+
 router.post('/signin', userController.signIn)
 router.post('/signup', userController.signUp) 
 router.post('/facebook',userController.postFbSignIn)
