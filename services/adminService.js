@@ -74,10 +74,10 @@ const adminController = {
     },
     postProduct: async (req, res, cb) => {
         try {
-            const { name, categoryId, description, quantity, price, imagesUrl, content,is_enabled } = req.body
+            const { name, categoryId, description, quantity, price, imagesUrl, content, is_enabled } = req.body
             const { file } = req
             const filePath = await imgurFileHandler(file)
-            const imgs =  JSON.parse(imagesUrl)
+            const imgs = JSON.parse(imagesUrl)
             const product = await Product.create({
                 name,
                 categoryId,
@@ -89,10 +89,10 @@ const adminController = {
                 imagesUrl: imgs,
                 is_enabled
             })
-            return cb({ 
+            return cb({
                 product,
                 message: '產品新增成功！'
-             })
+            })
         } catch (error) {
             console.log(error)
         }
@@ -120,13 +120,13 @@ const adminController = {
     },
     putProduct: async (req, res, cb) => {
         try {
-            const { name, categoryId, description, quantity, price, imagesUrl, content,is_enabled } = req.body
+            const { name, categoryId, description, quantity, price, imagesUrl, content, is_enabled } = req.body
             const { file } = req
             const filePath = await imgurFileHandler(file)
             const product = await Product.findByPk(req.params.id)
 
             const imgs = JSON.parse(imagesUrl)
-          
+
             await product.update({
                 name,
                 categoryId,
@@ -182,24 +182,34 @@ const adminController = {
     },
     addCategory: async (req, res, cb) => {
         try {
-            const { name } = req.body
-            const category = await Category.findOne({
+            const { name, image } = req.body
+
+            const data = await Category.findOne({
                 where: { name }
             })
 
+            if(data) {
+                return cb({
+                    status: 'error',
+                    statusCode: 500,
+                    message: '分類名稱已重複！'
+                })
+            }
             if (!name) {
                 req.flash("error_messages", "此欄位不得為空!")
                 return res.redirect('back')
             }
-            if (category) {
-                req.flash("error_messages", "此分類名稱已存在!")
-            }
+
 
             await Category.create({
-                name
+                name,
+                image
             })
 
-            return cb()
+            return cb({
+                status: 'success',
+                message: '分類新增成功！'
+            })
         } catch (error) {
             console.log(error)
 
@@ -225,7 +235,7 @@ const adminController = {
     },
     putCategory: async (req, res, cb) => {
         try {
-            const { name } = req.body
+            const { name, image } = req.body
             const data = await Category.findOne({
                 where: { name }
             })
@@ -233,14 +243,23 @@ const adminController = {
                 req.flash("error_messages", "此欄位不得為空!")
                 return res.redirect('back')
             }
-            if (data) {
-                req.flash("error_messages", "此分類名稱已存在!")
+            if(data && data.id !== Number(req.params.id)) {
+                return cb({
+                    status: 'error',
+                    statusCode: 500,
+                    message: '分類名稱已重複！'
+                })
             }
+
             const category = await Category.findByPk(req.params.id)
             await category.update({
-                name
+                name,
+                image
             })
-            return cb()
+            return cb({
+                status: "success",
+                message: "分類已更新!"
+            })
         } catch (error) {
             console.log(error)
         }
@@ -249,7 +268,10 @@ const adminController = {
         try {
             const category = await Category.findByPk(req.params.id)
             await category.destroy()
-            return cb()
+            return cb({
+                status: 'success',
+                message: '刪除成功！'
+            })
         } catch (error) {
             console.log(error)
         }
@@ -371,21 +393,29 @@ const adminController = {
     uploadImgs: async (req, res, cb) => {
         try {
             const { files } = req
-            //console.log(files, files[0])
             const arr = []
             for (let i = 0; i < files.length; i++) {
                 const filePath = await imgurFileHandler(files[i])
                 arr.push(filePath)
 
             }
-            console.log(arr)
-            // const filePath = await imgurFileHandler(files)
-            // console.log(files)
             return cb({
                 imagesUrl: arr,
             })
         } catch (error) {
             console.log(error);
+        }
+    },
+    uploadImg: async (req, res, cb) => {
+        try {
+            const { file } = req
+            console.log(file, '123')
+            const filePath = await imgurFileHandler(file)
+            return cb({
+                imageUrl: filePath
+            })
+        } catch (error) {
+            console.log(error)
         }
     }
 }
