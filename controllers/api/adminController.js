@@ -111,6 +111,29 @@ const adminController = {
             return res.json(data)
         })
     },
+    postArticle: (req, res) => {
+        adminService.postArticle(req, res, data => {
+            return res.json(data)
+        })
+    },
+    getArticles: (req, res) => {
+        adminService.getArticles(req, res, data => {
+            return res.json(data)
+        })
+    },
+    deleteArticle: (req, res) => {
+        adminService.deleteArticle(req, res, data => {
+            return res.json(data)
+        })
+    },
+    putArticle: (req, res) => {
+        adminService.putArticle(req, res, data => {
+            if(data.statusCode === 500) {
+                return res.status(500).json(data)
+             }
+            return res.json(data)
+        })
+    }
 }
 
 

@@ -1,5 +1,5 @@
 const db = require('../models')
-const { Product, Category, Order } = db
+const { Product, Category, Order, Article } = db
 const { imgurFileHandler } = require('../helpers/file-helpers')
 const { getOffset, getPagination } = require('../helpers/pagination-helper')
 const adminController = {
@@ -409,10 +409,81 @@ const adminController = {
     uploadImg: async (req, res, cb) => {
         try {
             const { file } = req
-            console.log(file, '123')
             const filePath = await imgurFileHandler(file)
             return cb({
                 imageUrl: filePath
+            })
+        } catch (error) {
+            console.log(error)
+        }
+    },
+    postArticle: async(req, res, cb) => {
+        try {
+            const { title, author, image, tag, description, isPublic, content } = req.body
+            await Article.create({
+                title,
+                author,
+                image,
+                tag,
+                description,
+                isPublic,
+                content
+            })
+
+            return cb({
+                message: '文章新增成功！'
+            })
+        } catch (error) {
+            console.log(error)
+        }
+    },
+    getArticles: async(req, res, cb) => {
+        try {
+            const articles = await Article.findAll({
+                nest: true,
+                raw: true
+            })
+            return cb({
+                articles
+            })
+        } catch (error) {
+            console.log(error)
+        }
+    },
+    deleteArticle: async(req, res, cb) => {
+        try {
+            const article = await Article.findByPk(req.params.id)
+            await article.destroy()
+            return cb({
+                status: 'success',
+                message: '刪除成功！'
+            })
+        } catch (error) {
+            console.log(error)
+        }
+    },
+    putArticle: async(req, res, cb) => {
+        try {
+            const { title, author, image, tag, description, isPublic, content } = req.body
+            const article = await Article.findByPk(req.params.id)
+            if(!article) {
+                return cb({
+                    statusCode: 500,
+                    message: '無法取得文章資料！'
+                })
+            }
+            await article.update({
+                title,
+                author,
+                image,
+                tag,
+                description,
+                isPublic,
+                content
+            })
+            return cb({
+                message: " 更新成功！",
+                article
             })
         } catch (error) {
             console.log(error)

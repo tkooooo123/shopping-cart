@@ -50,6 +50,11 @@ router.delete('/admin/orders/:id', authenticated, authenticatedAdmin, adminContr
 
 router.post('/admin/upload', upload.single('image'), authenticated, authenticatedAdmin, adminController.uploadImg)
 
+router.post('/admin/article', authenticated, authenticatedAdmin, adminController.postArticle)
+router.get('/admin/articles', authenticated, authenticatedAdmin, adminController.getArticles)
+router.delete('/admin/articles/:id',authenticated, authenticatedAdmin, adminController.deleteArticle)
+router.put('/admin/articles/:id', authenticated, authenticatedAdmin, adminController.putArticle)
+
 router.post('/signin', userController.signIn)
 router.post('/signup', userController.signUp) 
 router.post('/facebook',userController.postFbSignIn)
