@@ -5,7 +5,7 @@ module.exports = (sequelize, DataTypes) => {
     image: DataTypes.STRING,
   }, {});
   Category.associate = function(models) {
-    Category.hasMany(models.Product)
+    Category.hasMany(models.Product, { onDelete: 'cascade', hooks:true })
   };
   return Category;
 };
