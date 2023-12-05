@@ -9,8 +9,15 @@ const ArticleService ={
                 nest: true,
                 raw: true
             })
+            const arr = articles.map((article => {
+                item = {
+                    ...article,
+                    tag: JSON.parse(article.tag)
+                }
+                return item
+            }))
             return cb({
-                articles
+                articles: arr
             })
         } catch (error) {
             console.log(error)
@@ -36,7 +43,10 @@ const ArticleService ={
             })
            }
             return cb({
-                article
+                article: {
+                    ...article,
+                    tag: JSON.parse(article.tag)
+                }
             })
                
          

@@ -6,7 +6,7 @@ module.exports = (sequelize, DataTypes) => {
     content: DataTypes.STRING,
     image: DataTypes.STRING,
     isPublic: DataTypes.BOOLEAN,
-    tag: DataTypes.JSON,
+    tag: DataTypes.STRING,
     title:DataTypes.STRING
   }, {});
   Article.associate = function(models) {

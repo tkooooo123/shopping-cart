@@ -29,7 +29,7 @@ module.exports = {
         defaultValue: false,
       },
       tag: {
-        type: Sequelize.JSON,
+        type: Sequelize.STRING,
         allowNull: false,
       },
       createdAt: {

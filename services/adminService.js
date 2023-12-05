@@ -424,7 +424,7 @@ const adminController = {
                 title,
                 author,
                 image,
-                tag,
+                tag: JSON.stringify(tag),
                 description,
                 isPublic,
                 content
@@ -443,8 +443,17 @@ const adminController = {
                 nest: true,
                 raw: true
             })
+           
+            const arr = articles.map((article => {
+                item = {
+                    ...article,
+                    tag: JSON.parse(article.tag)
+                }
+                return item
+            }))
+            
             return cb({
-                articles
+                articles: arr
             })
         } catch (error) {
             console.log(error)
@@ -476,7 +485,7 @@ const adminController = {
                 title,
                 author,
                 image,
-                tag,
+                tag: JSON.stringify(tag),
                 description,
                 isPublic,
                 content
