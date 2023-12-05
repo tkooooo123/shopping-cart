@@ -100,6 +100,50 @@ const userService = {
             return next(error)
         }
 
+    },
+    editProfile: async(req, res, cb) => {
+        try {
+            const { id } = req.params
+            const { avatar, email, name, password, confirmPassword } = req.body
+            console.log(id, avatar, name, email, password, confirmPassword)
+            const isRegistered = await User.findOne({
+                where: { email },
+              nest:true,
+              raw: true
+            })
+            
+            if(isRegistered.id !== Number(id)) {
+                return cb({
+                    status: 'error',
+                    statusCode: 401,
+                    message: 'Email已重複註冊！'
+                })
+            }
+            if (password !== confirmPassword) {
+                return cb({
+                    status: "error",
+                    statusCode: 401,
+                    message:"密碼不相符，請重新確認!"
+                })
+            }
+
+            const user = await User.findByPk(id)
+            console.log(user)
+
+            await user.update({
+                name,
+                email,
+                avatar,
+                password: bcrypt.hashSync(password, bcrypt.genSaltSync(10), null)
+            })
+            
+            
+            return cb({
+                message: '更新成功！'
+            })
+        } catch (error) {
+            console.log(error)
+        }
     }
 
 }

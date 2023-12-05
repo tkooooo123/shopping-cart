@@ -7,8 +7,10 @@ const adminController = require('../controllers/api/adminController')
 const userController = require('../controllers/api/userController')
 const upload = require('../middleware/multer')
 const { authenticated, authenticatedAdmin } = require('../middleware/api-auth')
+const ArticleController = require('../controllers/api/articleController')
 
 router.get('/users/getCurrentUser', authenticated, userController.getCurrentUser)
+router.put('/users/:id', authenticated, userController.editProfile)
 
 
 router.get('/products', productController.getProducts)
@@ -27,6 +29,8 @@ router.post('/orders', authenticated, orderController.postOrder)
 router.put('/orders/:id/cancel', authenticated, orderController.cancelOrder)
 router.get('/orders/:id/payment', authenticated, orderController.getPayment)
 router.get('/categories',adminController.getCategories)
+router.get('/articles', ArticleController.getArticles)
+router.get('/article/:id', ArticleController.getArticle)
 
 router.get('/admin/products', authenticated, authenticatedAdmin, adminController.getProducts)
 router.get('/admin/product/add', authenticated, authenticatedAdmin, adminController.addProduct)
@@ -48,7 +52,7 @@ router.put('/admin/orders/:id/cancel', authenticated, authenticatedAdmin, adminC
 router.get('/admin/orders', authenticated, authenticatedAdmin, adminController.getOrders)
 router.delete('/admin/orders/:id', authenticated, authenticatedAdmin, adminController.deleteOrder)
 
-router.post('/admin/upload', upload.single('image'), authenticated, authenticatedAdmin, adminController.uploadImg)
+router.post('/admin/upload', upload.single('image'), authenticated, adminController.uploadImg)
 
 router.post('/admin/article', authenticated, authenticatedAdmin, adminController.postArticle)
 router.get('/admin/articles', authenticated, authenticatedAdmin, adminController.getArticles)

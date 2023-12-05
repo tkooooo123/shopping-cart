@@ -55,6 +55,14 @@ const userController = {
         } catch (error) {
             console.log(error)
         }
+    },
+    editProfile: (req, res) => {
+       userService.editProfile(req, res, data => {
+        if(data.statusCode === 401) {
+            return res.status(401).json(data)
+        }
+        return res.json(data)
+       })
     }
 
 
