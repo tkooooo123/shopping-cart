@@ -42,14 +42,21 @@ const productService = {
             const offset = getOffset(limit, page)
             const endIndex = offset + limit
             const total = products.length
+            const arr = products.map((product) => {
+                const item = {
+                 ...product,
+                 imagesUrl: JSON.parse(product.imagesUrl)
+                }
+                return item
+             })
 
             return cb( {
-                products: products.slice(offset, endIndex),
+                products: arr.slice(offset, endIndex),
                 categories,
                 categoryId,
                 pagination: getPagination(limit, page, total),
                 keyword,
-                totalProducts: products
+                totalProducts: arr
             })
         } catch (error) {
             console.log(error)
@@ -66,7 +73,10 @@ const productService = {
             quantity = await Array.from({ length: product.quantity }).map((v, i) => (i + 1))
 
             return cb({
-                product,
+                product: {
+                    ...product,
+                    imagesUrl: JSON.parse(product.imagesUrl)
+                },
                 quantity
             })
 

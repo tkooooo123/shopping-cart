@@ -25,10 +25,16 @@ const adminController = {
             const offset = getOffset(limit, page)
             const endIndex = offset + limit
             const total = products.length
-
+            const arr = products.map((product) => {
+               const item = {
+                ...product,
+                imagesUrl: JSON.parse(product.imagesUrl)
+               }
+               return item
+            })
 
             return cb({
-                products: products.slice(offset, endIndex),
+                products: arr.slice(offset, endIndex),
                 categories,
                 categoryId,
                 pagination: getPagination(limit, page, total)
@@ -77,7 +83,7 @@ const adminController = {
             const { name, categoryId, description, quantity, price, imagesUrl, content, is_enabled } = req.body
             const { file } = req
             const filePath = await imgurFileHandler(file)
-            const imgs = JSON.parse(imagesUrl)
+           
             const product = await Product.create({
                 name,
                 categoryId,
@@ -86,7 +92,7 @@ const adminController = {
                 content,
                 quantity,
                 price,
-                imagesUrl: imgs,
+                imagesUrl,
                 is_enabled
             })
             return cb({
@@ -125,8 +131,6 @@ const adminController = {
             const filePath = await imgurFileHandler(file)
             const product = await Product.findByPk(req.params.id)
 
-            const imgs = JSON.parse(imagesUrl)
-
             await product.update({
                 name,
                 categoryId,
@@ -135,7 +139,7 @@ const adminController = {
                 content,
                 quantity,
                 price,
-                imagesUrl: imgs,
+                imagesUrl,
                 is_enabled
             })
             return cb({
