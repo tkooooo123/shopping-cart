@@ -7,19 +7,26 @@ const productService = {
         try {
             let whereQuery = {}
             let keyword = req.query.keyword 
-            let categoryId = ''
+            let categoryId
             if (keyword) {
                 keyword = req.query.keyword.trim()
                 whereQuery.name = { [Op.like]: '%' + keyword + '%' }
             }
             if (req.query.categoryId) {
                 categoryId = Number(req.query.categoryId)
-                whereQuery.categoryId = categoryId
+                whereQuery.categoryId = categoryId || null
             }
 
             const products = await Product.findAll({
                 include: Category,
-                where: whereQuery ,
+                where: {
+                    [Op.and]: [
+                        {
+                            is_enabled: true
+                        },  
+                            whereQuery             
+                    ]
+                },
                 order: [['createdAt', 'DESC']],
                 nest: true,
                 raw: true
@@ -66,7 +73,8 @@ const productService = {
         } catch (error) {
             console.log(error)
         }
-    }
+    },
+  
 
 }
 
