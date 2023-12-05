@@ -22,7 +22,7 @@ const productService = {
                 where: {
                     [Op.and]: [
                         {
-                            is_enabled: true
+                            isEnabled: true
                         },  
                             whereQuery             
                     ]
@@ -64,8 +64,14 @@ const productService = {
     },
     getProduct: async (req, res, cb) => {
         try {
-            const product = await Product.findByPk(req.params.id, {
+            const product = await Product.findOne({
                 include: Category,
+                where: {
+                    [Op.and]: [
+                        { isEnabled: true},
+                        { id: req.params.id }
+                    ]
+                },
                 nest: true,
                 raw: true
             })

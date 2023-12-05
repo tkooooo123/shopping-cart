@@ -126,7 +126,7 @@ const adminController = {
     },
     putProduct: async (req, res, cb) => {
         try {
-            const { name, categoryId, description, quantity, price, imagesUrl, content, is_enabled } = req.body
+            const { name, categoryId, description, quantity, price, imagesUrl, content, isEnabled } = req.body
             const { file } = req
             const filePath = await imgurFileHandler(file)
             const product = await Product.findByPk(req.params.id)
@@ -140,7 +140,7 @@ const adminController = {
                 quantity,
                 price,
                 imagesUrl,
-                is_enabled
+                isEnabled
             })
             return cb({
                 product,
