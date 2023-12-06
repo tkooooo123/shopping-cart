@@ -5,7 +5,7 @@ const { getData, decryptedData } = require('../utils/payment')
 const { orderConfirmMail, paymentConfirmMail } = require('../utils/mail')
 const orderService = {
     postOrder: async (req, res, cb) => {
-        try {      
+        try {
             const carts = await Cart.findAll({
                 include: 'cartProducts',
                 where: { [Op.or]: [{ userId: req.user.id }, { id: req.session.cartId || null }] },
@@ -19,7 +19,9 @@ const orderService = {
                 phone: req.body.phone,
                 amount: req.body.amount,
                 shipping_status: req.body.shipping_status,
-                payment_status: req.body.payment_status
+                payment_status: req.body.payment_status,
+                email: req.body.email,
+                message: req.body.message
             })
             const items = Array.from({ length: carts.length }).map((d, i) => (
                 OrderItem.create({
@@ -29,9 +31,9 @@ const orderService = {
                     price: carts[i].cartProducts.price
                 })
             ))
-            await Promise.all(items)      
+            await Promise.all(items)
             //send order confirm mail
-            await orderConfirmMail(order)
+            // await orderConfirmMail(order)
 
             //decrease the inventory of product while order generated
             const productMap = new Map()
@@ -46,20 +48,12 @@ const orderService = {
             }
 
             //clear cartItems in cart
-            await carts.map(async (cart) => {
-                const cartItem = await CartItem.findByPk(cart.cartProducts.CartItem.id)
-                const cartId = cartItem.cartId
-                await cartItem.destroy()
 
-                //destroy cart
-                const itemCart = await Cart.findByPk(cartId, {
-                    include: 'cartProducts'
-                })
-                if (itemCart.cartProducts.length === 0) {
-                    await itemCart.destroy()
-                }
-            })
-   
+
+            //destroy cart
+            const itemCart = await Cart.findByPk(carts[0].id)
+            await itemCart.destroy()
+
 
             return cb({ order: order.toJSON() })
 
@@ -77,7 +71,7 @@ const orderService = {
                 Order.findAll({
                     where: { userId: req.user.id },
                     include: 'orderProducts',
-                    order: [['createdAt', 'DESC']]                 
+                    order: [['createdAt', 'DESC']]
 
                 })
 
@@ -90,11 +84,13 @@ const orderService = {
                     name: order.name,
                     phone: order.phone,
                     address: order.address,
+                    email: order.email,
+                    message: order.message,
                     payment_status: order.payment_status,
                     shipping_status: order.shipping_status,
                     orderProducts: order.orderProducts,
                     createdAt: order.createdAt.toLocaleDateString(),
-                    
+
                 }
             })
             return cb({
@@ -104,7 +100,7 @@ const orderService = {
             console.log(error)
         }
     },
-    getOrder: async(req, res, cb) => {
+    getOrder: async (req, res, cb) => {
         try {
             const order = await Order.findOne({
                 where: { id: req.params.id },
