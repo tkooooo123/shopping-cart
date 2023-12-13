@@ -9,7 +9,7 @@ module.exports = {
         email: 'root@example.com',
         password: bcrypt.hashSync('12345678', bcrypt.genSaltSync(10)),
         role: 'admin',
-        avatar: '',
+        avatar: 'https://i.imgur.com/Kv5ixy8.jpeg',
         createdAt: new Date(),
         updatedAt: new Date()
       },
@@ -18,7 +18,7 @@ module.exports = {
         email: 'user1@example.com',
         password: bcrypt.hashSync('12345678', bcrypt.genSaltSync(10)),
         role: 'user',
-        avatar: '',
+        avatar: 'https://i.imgur.com/Kv5ixy8.jpeg',
         createdAt: new Date(),
         updatedAt: new Date()
       },
@@ -27,7 +27,7 @@ module.exports = {
         email: 'user2@example.com',
         password: bcrypt.hashSync('12345678', bcrypt.genSaltSync(10)),
         role: 'user',
-        avatar: '',
+        avatar: 'https://i.imgur.com/Kv5ixy8.jpeg',
         createdAt: new Date(),
         updatedAt: new Date()
       }

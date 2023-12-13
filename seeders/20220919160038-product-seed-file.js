@@ -17,6 +17,7 @@ module.exports = {
         isEnabled: true,
         imagesUrl: JSON.stringify([]),
         content: '',
+        unit:'200公克 / 包',
         createdAt: new Date,
         updatedAt: new Date
       })),
