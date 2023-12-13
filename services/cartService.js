@@ -5,14 +5,13 @@ const category = require('../models/category')
 const cartService = {
     getCarts: async (req, res, cb) => {
         try {
-   
-          
+ 
             let carts = {}
          
             if (req.user) {
                 const userCarts = await Cart.findAll({
                     include: { model: Product , as: "cartProducts" , include: Category },
-                    where: { [Op.or]: [{ userId: req.user.id || null }, { id: req.session.cartId || null }] },
+                    where: { userId: req.user.id  },
                     nest: true,
                     raw: true
                 })
@@ -29,12 +28,10 @@ const cartService = {
             let totalPrice = carts.length > 0 ? carts.map(d =>
                 d.cartProducts.price * d.cartProducts.CartItem.quantity)
                 .reduce((a, b) => a + b) : 0
-
-                const test = {}
             return cb({
                 carts,
                 totalPrice,
-                test
+
             })
         } catch (error) {
             console.log(error)
@@ -169,7 +166,6 @@ const cartService = {
     },
     updateCartItem: async (req, res, cb) => {
         try {
-            console.log(req.body.quantity)
             const cartItem = await CartItem.findByPk(req.params.id)
            
                 await cartItem.update({
