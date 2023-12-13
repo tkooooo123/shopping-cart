@@ -9,7 +9,8 @@ module.exports = (sequelize, DataTypes) => {
     price: DataTypes.INTEGER,
     isEnabled:DataTypes.BOOLEAN,
     content: DataTypes.STRING,
-    imagesUrl: DataTypes.STRING
+    imagesUrl: DataTypes.STRING,
+    unit: DataTypes.STRING,
   }, {});
   Product.associate = function(models) {
     Product.belongsTo(models.Category)
