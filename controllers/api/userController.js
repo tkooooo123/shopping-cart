@@ -19,6 +19,9 @@ const userController = {
     },
     signUp: (req, res) => {
         userService.signUp(req, res, data => {
+            if (data.statusCode === 401) {
+                return res.status(401).json(data)
+            }
             return res.json(data)
         })
 

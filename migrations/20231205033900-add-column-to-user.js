@@ -5,6 +5,7 @@ module.exports = {
     return queryInterface.addColumn('Users', 'avatar', {
       type: Sequelize.STRING,
       allowNull: false,
+      defaultValue: 'https://i.imgur.com/Kv5ixy8.jpeg'
     })
   },
 
