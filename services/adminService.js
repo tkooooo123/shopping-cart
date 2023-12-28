@@ -80,20 +80,20 @@ const adminController = {
     },
     postProduct: async (req, res, cb) => {
         try {
-            const { name, categoryId, description, quantity, price, imagesUrl, content, is_enabled } = req.body
-            const { file } = req
-            const filePath = await imgurFileHandler(file)
+            const { name, categoryId, description, quantity, price, image, imagesUrl, content, isEnabled, unit } = req.body
+          
            
             const product = await Product.create({
                 name,
                 categoryId,
-                image: filePath || null,
+                image,
                 description,
                 content,
                 quantity,
                 price,
                 imagesUrl,
-                is_enabled
+                isEnabled,
+                unit
             })
             return cb({
                 product,
@@ -126,21 +126,20 @@ const adminController = {
     },
     putProduct: async (req, res, cb) => {
         try {
-            const { name, categoryId, description, quantity, price, imagesUrl, content, isEnabled } = req.body
-            const { file } = req
-            const filePath = await imgurFileHandler(file)
+            const { name, categoryId, description, quantity, price, image , imagesUrl, content, isEnabled, unit } = req.body
             const product = await Product.findByPk(req.params.id)
 
             await product.update({
                 name,
                 categoryId,
-                image: filePath || product.image,
+                image,
                 description,
                 content,
                 quantity,
                 price,
                 imagesUrl,
-                isEnabled
+                isEnabled,
+                unit
             })
             return cb({
                 product,

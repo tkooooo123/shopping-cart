@@ -12,7 +12,9 @@ const orderService = {
                 nest: true,
                 raw: true
             })
+            const osn = 'BA'+ Date.now()
             const order = await Order.create({
+                
                 UserId: req.user.id,
                 name: req.body.name,
                 address: req.body.address,
@@ -21,7 +23,8 @@ const orderService = {
                 shipping_status: req.body.shipping_status,
                 payment_status: req.body.payment_status,
                 email: req.body.email,
-                message: req.body.message
+                message: req.body.message,
+                osn
             })
             const items = Array.from({ length: carts.length }).map((d, i) => (
                 OrderItem.create({
@@ -90,6 +93,7 @@ const orderService = {
                     shipping_status: order.shipping_status,
                     orderProducts: order.orderProducts,
                     createdAt: order.createdAt.toLocaleDateString(),
+                    osn: order.osn
 
                 }
             })

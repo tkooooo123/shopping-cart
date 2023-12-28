@@ -10,7 +10,8 @@ module.exports = (sequelize, DataTypes) => {
     payment_status: DataTypes.STRING,
     shipping_status: DataTypes.STRING,
     email: DataTypes.STRING,
-    message: DataTypes.STRING
+    message: DataTypes.STRING,
+    osn: DataTypes.STRING,
   }, {});
   Order.associate = function(models) {
     Order.belongsTo(models.User)
