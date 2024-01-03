@@ -302,9 +302,12 @@ const adminController = {
 
             })
 
-            await orders.forEach(order => {
-                order.createdAt = order.createdAt.toLocaleDateString()
-
+            orders = orders.map(order => {
+                order = order.get({ plain: true })
+                return {
+                    ...order,
+                    createdAt: order.createdAt.toLocaleDateString(),
+                }
             })
 
             //add paginator
