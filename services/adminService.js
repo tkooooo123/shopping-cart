@@ -306,7 +306,7 @@ const adminController = {
                 order = order.get({ plain: true })
                 return {
                     ...order,
-                    createdAt: order.createdAt.toLocaleDateString(),
+                    createdAt: order.createdAt.toLocaleDateString('zh-TW'),
                 }
             })
 

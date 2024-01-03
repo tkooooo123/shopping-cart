@@ -81,6 +81,7 @@ const orderService = {
             ])
             orders = orders.map(order => {
                 order = order.get({ plain: true })
+                console.log(order.createdAt.toLocaleDateString('zh-TW'))
                 return {
                     id: order.id,
                     amount: order.amount,
@@ -92,7 +93,7 @@ const orderService = {
                     payment_status: order.payment_status,
                     shipping_status: order.shipping_status,
                     orderProducts: order.orderProducts,
-                    createdAt: order.createdAt.toLocaleDateString(),
+                    createdAt: order.createdAt.toLocaleDateString('zh-TW'),
                     osn: order.osn
 
                 }
