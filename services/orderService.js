@@ -12,14 +12,19 @@ const orderService = {
                 nest: true,
                 raw: true
             })
+            const osn = 'BA'+ Date.now()
             const order = await Order.create({
+                
                 UserId: req.user.id,
                 name: req.body.name,
                 address: req.body.address,
                 phone: req.body.phone,
                 amount: req.body.amount,
                 shipping_status: req.body.shipping_status,
-                payment_status: req.body.payment_status
+                payment_status: req.body.payment_status,
+                email: req.body.email,
+                message: req.body.message,
+                osn
             })
             const items = Array.from({ length: carts.length }).map((d, i) => (
                 OrderItem.create({
@@ -31,7 +36,7 @@ const orderService = {
             ))
             await Promise.all(items)
             //send order confirm mail
-            await orderConfirmMail(order)
+            // await orderConfirmMail(order)
 
             //decrease the inventory of product while order generated
             const productMap = new Map()
@@ -46,20 +51,12 @@ const orderService = {
             }
 
             //clear cartItems in cart
-            await carts.map(async (cart) => {
-                const cartItem = await CartItem.findByPk(cart.cartProducts.CartItem.id)
-                const cartId = cartItem.cartId
-                await cartItem.destroy()
 
-                //destroy cart
-                const itemCart = await Cart.findByPk(cartId, {
-                    include: 'cartProducts'
-                })
-                if (itemCart.cartProducts.length === 0) {
-                    await itemCart.destroy()
-                }
-            })
-            console.log(order.toJSON())
+
+            //destroy cart
+            const itemCart = await Cart.findByPk(carts[0].id)
+            await itemCart.destroy()
+
 
             return cb({ order: order.toJSON() })
 
@@ -67,7 +64,7 @@ const orderService = {
             console.log(error)
         }
     },
-    getOrder: async (req, res, cb) => {
+    getOrders: async (req, res, cb) => {
         try {
             if (!req.user) {
                 req.flash('error_messages', '使用者尚未登入，請先登入!')
@@ -77,25 +74,46 @@ const orderService = {
                 Order.findAll({
                     where: { userId: req.user.id },
                     include: 'orderProducts',
+                    order: [['createdAt', 'DESC']]
 
                 })
 
             ])
             orders = orders.map(order => {
                 order = order.get({ plain: true })
+                console.log(order.createdAt.toLocaleDateString('zh-TW'))
                 return {
                     id: order.id,
                     amount: order.amount,
                     name: order.name,
                     phone: order.phone,
                     address: order.address,
+                    email: order.email,
+                    message: order.message,
                     payment_status: order.payment_status,
                     shipping_status: order.shipping_status,
-                    orderProducts: order.orderProducts
+                    orderProducts: order.orderProducts,
+                    createdAt: order.createdAt.toLocaleDateString('zh-TW'),
+                    osn: order.osn
+
                 }
             })
             return cb({
                 orders
+            })
+        } catch (error) {
+            console.log(error)
+        }
+    },
+    getOrder: async (req, res, cb) => {
+        try {
+            const order = await Order.findOne({
+                where: { id: req.params.id },
+                include: 'orderProducts'
+            })
+
+            return cb({
+                order
             })
         } catch (error) {
             console.log(error)
@@ -120,6 +138,7 @@ const orderService = {
             await order.update({
                 sn: tradeInfo.MerchantOrderNo
             })
+            console.log(tradeInfo)
             return cb({
                 order: order.toJSON(),
                 tradeInfo
@@ -136,16 +155,12 @@ const orderService = {
                 where: { sn },
                 include: User
             })
-
             if (!order) {
                 return cb({
                     status: "error",
                     message: "The order doesn't exist!"
                 })
             }
-
-
-
             await Payment.findOrCreate({
                 where: { params: sn },
                 defaults: {

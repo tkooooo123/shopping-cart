@@ -5,6 +5,11 @@ const orderController = {
             return res.json(data)
         })
     },
+    getOrders: (req, res) => {
+        orderService.getOrders(req, res, data => {
+            return res.json(data)
+        })
+    },
     getOrder: (req, res) => {
         orderService.getOrder(req, res, data => {
             return res.json(data)

@@ -7,19 +7,27 @@ const productService = {
         try {
             let whereQuery = {}
             let keyword = req.query.keyword 
-            let categoryId = ''
+            let categoryId
             if (keyword) {
                 keyword = req.query.keyword.trim()
                 whereQuery.name = { [Op.like]: '%' + keyword + '%' }
             }
             if (req.query.categoryId) {
                 categoryId = Number(req.query.categoryId)
-                whereQuery.categoryId = categoryId
+                whereQuery.categoryId = categoryId || null
             }
 
             const products = await Product.findAll({
                 include: Category,
-                where: whereQuery ,
+                where: {
+                    [Op.and]: [
+                        {
+                            isEnabled: true
+                        },  
+                            whereQuery             
+                    ]
+                },
+                order: [['createdAt', 'DESC']],
                 nest: true,
                 raw: true
             })
@@ -34,14 +42,21 @@ const productService = {
             const offset = getOffset(limit, page)
             const endIndex = offset + limit
             const total = products.length
+            const arr = products.map((product) => {
+                const item = {
+                 ...product,
+                 imagesUrl: JSON.parse(product.imagesUrl)
+                }
+                return item
+             })
 
             return cb( {
-                products: products.slice(offset, endIndex),
+                products: arr.slice(offset, endIndex),
                 categories,
                 categoryId,
                 pagination: getPagination(limit, page, total),
                 keyword,
-                totalProducts: products
+                totalProducts: arr
             })
         } catch (error) {
             console.log(error)
@@ -49,8 +64,14 @@ const productService = {
     },
     getProduct: async (req, res, cb) => {
         try {
-            const product = await Product.findByPk(req.params.id, {
+            const product = await Product.findOne({
                 include: Category,
+                where: {
+                    [Op.and]: [
+                        { isEnabled: true},
+                        { id: req.params.id }
+                    ]
+                },
                 nest: true,
                 raw: true
             })
@@ -58,14 +79,18 @@ const productService = {
             quantity = await Array.from({ length: product.quantity }).map((v, i) => (i + 1))
 
             return cb({
-                product,
+                product: {
+                    ...product,
+                    imagesUrl: JSON.parse(product.imagesUrl)
+                },
                 quantity
             })
 
         } catch (error) {
             console.log(error)
         }
-    }
+    },
+  
 
 }
 

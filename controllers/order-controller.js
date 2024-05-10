@@ -6,8 +6,8 @@ const orderController = {
         return res.redirect(`/orders/${data.order.id}/payment`)
        })
     },
-    getOrder: (req, res) => {
-        orderService.getOrder(req, res, data => {
+    getOrders: (req, res) => {
+        orderService.getOrders(req, res, data => {
             return res.render('orders', data)
         })
     },

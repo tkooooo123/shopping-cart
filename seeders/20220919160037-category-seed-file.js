@@ -6,6 +6,7 @@ module.exports = {
     await queryInterface.bulkInsert('Categories',
       Array.from({ length: 4 }).map((v, i) => ({
         name: categories[i],
+        image: '',
         createdAt: new Date,
         updatedAt: new Date
       })),

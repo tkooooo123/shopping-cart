@@ -14,6 +14,10 @@ module.exports = {
         description: faker.lorem.sentences(1),
         quantity: Math.floor(Math.random() * 100 + 50),
         price: 5 * (Math.floor(Math.random() * 100)) + 100,
+        isEnabled: true,
+        imagesUrl: JSON.stringify([]),
+        content: '',
+        unit:'200公克 / 包',
         createdAt: new Date,
         updatedAt: new Date
       })),

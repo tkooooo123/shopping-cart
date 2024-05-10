@@ -7,22 +7,30 @@ const adminController = require('../controllers/api/adminController')
 const userController = require('../controllers/api/userController')
 const upload = require('../middleware/multer')
 const { authenticated, authenticatedAdmin } = require('../middleware/api-auth')
+const ArticleController = require('../controllers/api/articleController')
 
 router.get('/users/getCurrentUser', authenticated, userController.getCurrentUser)
+router.put('/users/:id', authenticated, userController.editProfile)
+
 
 router.get('/products', productController.getProducts)
 router.get('/products/:id', productController.getProduct)
 router.get('/carts',authenticated, cartController.getCarts)
 router.post('/carts',authenticated, cartController.postCart)
+router.delete('/carts/:id',authenticated, cartController.deleteCart)
 router.get('/carts/checkout', authenticated, cartController.checkoutCart)
 router.post('/carts/cartItem/:id/add', cartController.addCartItem)
 router.post('/carts/cartItem/:id/sub', cartController.subCartItem)
+router.post('/carts/cartItem/:id/update', cartController.updateCartItem)
 router.delete('/carts/cartItem/:id/delete', cartController.deleteCartItem)
-router.get('/orders', authenticated, orderController.getOrder)
+router.get('/orders', authenticated, orderController.getOrders)
+router.get('/order/:id', authenticated, orderController.getOrder)
 router.post('/orders', authenticated, orderController.postOrder)
 router.put('/orders/:id/cancel', authenticated, orderController.cancelOrder)
 router.get('/orders/:id/payment', authenticated, orderController.getPayment)
 router.get('/categories',adminController.getCategories)
+router.get('/articles', ArticleController.getArticles)
+router.get('/article/:id', ArticleController.getArticle)
 
 router.get('/admin/products', authenticated, authenticatedAdmin, adminController.getProducts)
 router.get('/admin/product/add', authenticated, authenticatedAdmin, adminController.addProduct)
@@ -31,6 +39,7 @@ router.post('/admin/product',authenticated, authenticatedAdmin, upload.single('i
 router.delete('/admin/products/:id/delete', authenticated, authenticatedAdmin, adminController.deleteProduct)
 router.get('/admin/product/:id/edit', authenticated, authenticatedAdmin, adminController.editProduct)
 router.put('/admin/products/:id', authenticated, authenticatedAdmin, upload.single('image'), adminController.putProduct)
+router.post('/admin/product/upload', authenticated, authenticatedAdmin, upload.array('imagesUrl'), adminController.uploadImgs )
 router.get('/admin/categories', authenticated, authenticatedAdmin, adminController.getCategories)
 router.post('/admin/categories', authenticated, authenticatedAdmin, adminController.addCategory)
 router.get('/admin/categories/:id', authenticated, authenticatedAdmin, adminController.editCategory)
@@ -41,8 +50,17 @@ router.get('/admin/orders/:id', authenticated, authenticatedAdmin, adminControll
 router.put('/admin/orders/:id', authenticated, authenticatedAdmin, adminController.putOrder)
 router.put('/admin/orders/:id/cancel', authenticated, authenticatedAdmin, adminController.cancelOrder)
 router.get('/admin/orders', authenticated, authenticatedAdmin, adminController.getOrders)
+router.delete('/admin/orders/:id', authenticated, authenticatedAdmin, adminController.deleteOrder)
+
+router.post('/admin/upload', upload.single('image'), authenticated, adminController.uploadImg)
+
+router.post('/admin/article', authenticated, authenticatedAdmin, adminController.postArticle)
+router.get('/admin/articles', authenticated, authenticatedAdmin, adminController.getArticles)
+router.delete('/admin/articles/:id',authenticated, authenticatedAdmin, adminController.deleteArticle)
+router.put('/admin/articles/:id', authenticated, authenticatedAdmin, adminController.putArticle)
 
 router.post('/signin', userController.signIn)
 router.post('/signup', userController.signUp) 
+router.post('/facebook',userController.postFbSignIn)
 
 module.exports = router

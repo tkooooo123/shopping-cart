@@ -32,6 +32,9 @@ const adminController = {
     },
     deleteProduct: (req, res) => {
         adminService.deleteProduct(req, res, data => {
+            if(data.statusCode === 500) {
+              return  res.status(500).json(data)
+            }
             return res.json(data)
         })
     },
@@ -42,6 +45,9 @@ const adminController = {
     },
     addCategory: (req, res) => {
         adminService.addCategory(req, res, data => {
+            if(data.statusCode === 500) {
+                return  res.status(500).json(data)
+              }
 
             return res.json(data)
         })
@@ -54,6 +60,9 @@ const adminController = {
     },
     putCategory: (req, res) => {
         adminService.putCategory(req, res, data => {
+            if(data.statusCode === 500) {
+                return  res.status(500).json(data)
+              }
             return res.json(data)
         })
     },
@@ -79,6 +88,49 @@ const adminController = {
     },
     cancelOrder: (req, res) => {
         adminService.cancelOrder(req, res, data => {
+            return res.json(data)
+        })
+    },
+    deleteOrder: (req, res) => {
+        adminService.deleteOrder(req, res, data => {
+            if(data.statusCode === 500) {
+               return res.status(500).json(data)
+            }
+            return res.json(data)
+        })
+    },
+    uploadImgs: (req, res) => {
+        adminService.uploadImgs(req, res, data => {
+            
+            return res.json(data)
+        })
+    },
+    uploadImg: (req, res) => {
+        adminService.uploadImg(req, res, data => {
+            
+            return res.json(data)
+        })
+    },
+    postArticle: (req, res) => {
+        adminService.postArticle(req, res, data => {
+            return res.json(data)
+        })
+    },
+    getArticles: (req, res) => {
+        adminService.getArticles(req, res, data => {
+            return res.json(data)
+        })
+    },
+    deleteArticle: (req, res) => {
+        adminService.deleteArticle(req, res, data => {
+            return res.json(data)
+        })
+    },
+    putArticle: (req, res) => {
+        adminService.putArticle(req, res, data => {
+            if(data.statusCode === 500) {
+                return res.status(500).json(data)
+             }
             return res.json(data)
         })
     }

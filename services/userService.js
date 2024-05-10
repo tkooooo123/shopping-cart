@@ -11,9 +11,9 @@ const userService = {
                 return cb({
                     status: "error",
                     statusCode: "400",
-                    message:"所有欄位不可為空!"
+                    message: "所有欄位不可為空!"
                 })
-                
+
             }
             const user = await User.findOne({ where: { email: email } })
             if (!user) {
@@ -23,15 +23,15 @@ const userService = {
                     message: "輸入的Email尚未註冊!"
                 })
             }
-            if(!bcrypt.compareSync(password, user.password)) {
+            if (!bcrypt.compareSync(password, user.password)) {
                 return cb({
                     status: "error",
                     statusCode: "401",
                     message: "密碼輸入錯誤!"
                 })
             }
-            const payload = { id: user.id}
-            const token = jwt.sign(payload, process.env.JWT_SECRET) 
+            const payload = { id: user.id }
+            const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '2h' })
             return cb({
                 status: "success",
                 statusCode: 200,
@@ -41,7 +41,8 @@ const userService = {
                     id: user.id,
                     name: user.name,
                     email: user.email,
-                    role: user.role
+                    role: user.role,
+                    avatar: user.avatar,
                 }
             })
         } catch (error) {
@@ -52,32 +53,32 @@ const userService = {
     signUp: async (req, res, cb, next) => {
         try {
             const { name, email, password, confirmPassword } = req.body
+            console.log( 'test',name, email, password, confirmPassword)
             if (!name || !email || !password || !confirmPassword) {
-                req.flash('error_messages', '所有欄位不可為空!')
                 return cb({
                     status: "error",
-                    statusCode: "400",
-                    message:"所有欄位不可為空!"
+                    statusCode: 401,
+                    message: "所有欄位不可為空!"
                 })
-                
+
             }
-            
+
             const user = await User.findOne({ where: { email } })
+            console.log('user111')
 
             if (user) {
-                req.flash('error_messages', 'Email已重複註冊!')
                 return cb({
                     status: "error",
-                    statusCode: "401",
-                    message:"Email已重複註冊!"
+                    statusCode: 401,
+                    message: "Email已重複註冊!"
                 })
             }
+            console.log('user222')
             if (password !== confirmPassword) {
-                req.flash('error_messages', '密碼不相符!')
                 return cb({
                     status: "error",
-                    statusCode: "401",
-                    message:"密碼不相符!"
+                    statusCode: 401,
+                    message: "密碼不相符!"
                 })
             }
 
@@ -87,19 +88,63 @@ const userService = {
                 email,
                 password: bcrypt.hashSync(password, bcrypt.genSaltSync(10), null)
             })
-            
+
 
             return cb({
                 status: "success",
-                statusCode: "200",
-                message: "已成功註冊!",
-    
+                statusCode: 200,
+                message: "註冊成功!",
+
             })
         } catch (error) {
             console.log(error)
             return next(error)
         }
 
+    },
+    editProfile: async (req, res, cb) => {
+        try {
+            const { id } = req.params
+            const { avatar, email, name, password, confirmPassword } = req.body
+            console.log(id, avatar, name, email, password, confirmPassword)
+            const isRegistered = await User.findOne({
+                where: { email },
+                nest: true,
+                raw: true
+            })
+
+            if (isRegistered.id !== Number(id)) {
+                return cb({
+                    status: 'error',
+                    statusCode: 401,
+                    message: 'Email已重複註冊！'
+                })
+            }
+            if (password !== confirmPassword) {
+                return cb({
+                    status: "error",
+                    statusCode: 401,
+                    message: "密碼不相符，請重新確認!"
+                })
+            }
+
+            const user = await User.findByPk(id)
+            console.log(user)
+
+            await user.update({
+                name,
+                email,
+                avatar,
+                password: bcrypt.hashSync(password, bcrypt.genSaltSync(10), null)
+            })
+
+
+            return cb({
+                message: '更新成功！'
+            })
+        } catch (error) {
+            console.log(error)
+        }
     }
 
 }
